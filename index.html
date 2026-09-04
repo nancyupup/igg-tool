@@ -1,161 +1,313 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IGG Referral Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <title>IGG Referral Tracker</title>
 
-    body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-        background: #f5f7fb;
-        color: #1f2937;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 24px;
-    }
+        body {
+            margin: 0;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                "PingFang SC",
+                "Hiragino Sans GB",
+                "Microsoft YaHei",
+                Arial,
+                sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
 
-    h1 {
-        margin: 0 0 8px;
-        font-size: 30px;
-    }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px 60px;
+        }
 
-    .subtitle {
-        color: #6b7280;
-        margin-bottom: 30px;
-    }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+            font-weight: 700;
+        }
 
-    .card {
-        background: white;
-        border-radius: 14px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 28px;
+        }
 
-    label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
+        .card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
 
-    input, textarea, select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 14px;
-        font-family: inherit;
-    }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
 
-    textarea {
-        min-height: 260px;
-        resize: vertical;
-    }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #374151;
+        }
 
-    .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 11px 12px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
 
-    button {
-        border: none;
-        border-radius: 8px;
-        padding: 12px 20px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        background: #111827;
-        color: white;
-        margin-top: 16px;
-    }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #6b7280;
+        }
 
-    button:hover {
-        opacity: 0.85;
-    }
+        textarea {
+            min-height: 300px;
+            resize: vertical;
+            line-height: 1.55;
+            font-family: monospace;
+        }
 
-    .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-        margin-bottom: 20px;
-    }
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
 
-    .kpi {
-        background: white;
-        border-radius: 14px;
-        padding: 22px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-    .kpi-title {
-        color: #6b7280;
-        font-size: 13px;
-        margin-bottom: 10px;
-    }
+        .primary {
+            background: #111827;
+            color: white;
+        }
 
-    .kpi-value {
-        font-size: 25px;
-        font-weight: 700;
-    }
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-    }
+        .danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-    th, td {
-        padding: 12px;
-        border-bottom: 1px solid #e5e7eb;
-        text-align: left;
-    }
+        button:hover {
+            opacity: 0.88;
+        }
 
-    th {
-        color: #6b7280;
-        font-weight: 600;
-        background: #f9fafb;
-    }
+        .message {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+        }
 
-    .success {
-        padding: 12px 16px;
-        background: #ecfdf5;
-        color: #047857;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
+        .message.success {
+            display: block;
+            background: #ecfdf5;
+            color: #047857;
+        }
 
-    .warning {
-        padding: 12px 16px;
-        background: #fff7ed;
-        color: #c2410c;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
+        .message.error {
+            display: block;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
 
-    .hidden {
-        display: none;
-    }
+        .message.info {
+            display: block;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
 
-    @media (max-width: 800px) {
         .kpi-grid {
-            grid-template-columns: repeat(2, 1fr);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
-        .row {
-            grid-template-columns: 1fr;
+        .kpi {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
         }
-    }
-</style>
+
+        .kpi-title {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-value {
+            font-size: 27px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        td.number,
+        th.number {
+            text-align: right;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .negative {
+            color: #dc2626;
+        }
+
+        .positive {
+            color: #059669;
+        }
+
+        .muted {
+            color: #9ca3af;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            gap: 10px;
+        }
+
+        .history-date {
+            font-weight: 600;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .tip {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 13px 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #6b7280;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 14px 40px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -164,90 +316,179 @@
 
     <h1>IGG Referral Tracker</h1>
     <div class="subtitle">
-        Indiegogo Referral Links 数据追踪工具
+        直接粘贴 IGG Referral Links 页面复制的数据，自动解析并保存每日快照
     </div>
 
-    <div id="message"></div>
-
+    <!-- 输入区域 -->
     <div class="card">
 
-        <div class="row">
+        <div class="form-row">
 
             <div>
                 <label>项目名称</label>
-                <input id="projectName" value="HOVERAir VERSA">
+                <input
+                    id="projectName"
+                    type="text"
+                    value="HOVERAir VERSA"
+                    placeholder="例如：HOVERAir VERSA"
+                >
             </div>
 
             <div>
                 <label>数据日期</label>
-                <input id="dataDate" type="date">
+                <input
+                    id="dataDate"
+                    type="date"
+                >
             </div>
 
         </div>
 
-        <div style="margin-top:24px;">
+        <label>IGG Referral Links 原始数据</label>
 
-            <label>
-                粘贴 IGG Referral Links 数据
-            </label>
+        <textarea
+            id="rawData"
+            placeholder="直接从 IGG Referral Links 页面复制，然后粘贴到这里即可，不需要整理格式。"
+        ></textarea>
 
-            <textarea
-                id="dataInput"
-                placeholder="从 IGG 后台复制 Referral Links 数据，然后粘贴到这里..."
-            ></textarea>
+        <div class="button-row">
 
-            <button onclick="parseData()">
+            <button
+                class="primary"
+                onclick="parseAndSave()"
+            >
                 解析并保存今日数据
+            </button>
+
+            <button
+                class="secondary"
+                onclick="parsePreview()"
+            >
+                仅解析预览
+            </button>
+
+            <button
+                class="secondary"
+                onclick="loadLatest()"
+            >
+                查看最近数据
+            </button>
+
+            <button
+                class="danger"
+                onclick="clearInput()"
+            >
+                清空输入
             </button>
 
         </div>
 
+        <div id="message" class="message"></div>
+
+        <div class="tip">
+            <strong>使用方法：</strong>
+            从 IGG Referral Links 页面直接复制全部 Referral 数据 →
+            粘贴到上方 →
+            点击「解析并保存今日数据」。
+            不需要手动整理成表格。
+        </div>
+
     </div>
 
-    <div id="result" class="hidden">
+    <!-- KPI -->
+    <div class="kpi-grid">
 
-        <div class="kpi-grid">
-
-            <div class="kpi">
-                <div class="kpi-title">Referral Links</div>
-                <div class="kpi-value" id="linkCount">0</div>
+        <div class="kpi">
+            <div class="kpi-title">Referral Links</div>
+            <div
+                class="kpi-value"
+                id="kpiLinks"
+            >
+                -
             </div>
+        </div>
 
-            <div class="kpi">
-                <div class="kpi-title">累计订单</div>
-                <div class="kpi-value" id="totalOrders">0</div>
+        <div class="kpi">
+            <div class="kpi-title">累计订单</div>
+            <div
+                class="kpi-value"
+                id="kpiOrders"
+            >
+                -
             </div>
+        </div>
 
-            <div class="kpi">
-                <div class="kpi-title">今日新增订单</div>
-                <div class="kpi-value" id="newOrders">-</div>
+        <div class="kpi">
+            <div class="kpi-title">累计收入</div>
+            <div
+                class="kpi-value"
+                id="kpiRevenue"
+            >
+                -
             </div>
+        </div>
 
-            <div class="kpi">
-                <div class="kpi-title">今日新增金额</div>
-                <div class="kpi-value" id="newRevenue">-</div>
+        <div class="kpi">
+            <div class="kpi-title">今日新增收入</div>
+            <div
+                class="kpi-value"
+                id="kpiDailyRevenue"
+            >
+                -
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 数据表 -->
+    <div class="card">
+
+        <div class="section-title">
+
+            <h2>Referral 数据</h2>
+
+            <div>
+                <span
+                    class="small"
+                    id="tableInfo"
+                >
+                    尚未解析数据
+                </span>
             </div>
 
         </div>
 
-        <div class="card">
-
-            <h2>Referral Links 数据</h2>
+        <div class="table-wrapper">
 
             <table>
 
                 <thead>
-                    <tr>
-                        <th>Display name</th>
-                        <th>Status</th>
-                        <th>累计订单</th>
-                        <th>累计收入</th>
-                        <th>今日新增订单</th>
-                        <th>今日新增收入</th>
-                    </tr>
+
+                <tr>
+                    <th>Display name</th>
+                    <th>Status</th>
+                    <th class="number">累计订单</th>
+                    <th class="number">1 Day</th>
+                    <th class="number">7 Days</th>
+                    <th class="number">累计收入</th>
+                    <th class="number">今日新增订单</th>
+                    <th class="number">今日新增收入</th>
+                </tr>
+
                 </thead>
 
-                <tbody id="tableBody"></tbody>
+                <tbody id="dataTableBody">
+
+                <tr>
+                    <td
+                        colspan="8"
+                        class="empty"
+                    >
+                        暂无数据
+                    </td>
+                </tr>
+
+                </tbody>
 
             </table>
 
@@ -255,468 +496,1597 @@
 
     </div>
 
+    <!-- 历史数据 -->
+    <div class="card">
+
+        <div class="section-title">
+
+            <h2>历史快照</h2>
+
+            <button
+                class="danger"
+                onclick="clearHistory()"
+            >
+                清空全部历史
+            </button>
+
+        </div>
+
+        <div
+            id="historyList"
+            class="history-list"
+        >
+            <div class="empty">
+                暂无历史数据
+            </div>
+        </div>
+
+    </div>
+
 </div>
+
 
 <script>
 
+/* =========================================================
+   基础配置
+========================================================= */
+
 const STORAGE_KEY = "igg_referral_snapshots";
 
-function setToday() {
+const today = new Date();
 
-    const today = new Date();
+document.getElementById("dataDate").value =
+    today.toISOString().split("T")[0];
 
-    const year = today.getFullYear();
 
-    const month = String(today.getMonth() + 1).padStart(2, "0");
+/* =========================================================
+   工具函数
+========================================================= */
 
-    const day = String(today.getDate()).padStart(2, "0");
+function showMessage(text, type = "info") {
 
-    document.getElementById("dataDate").value =
-        `${year}-${month}-${day}`;
+    const el = document.getElementById("message");
+
+    el.textContent = text;
+
+    el.className = "message " + type;
 }
 
-setToday();
 
+function escapeHtml(value) {
 
-function showMessage(text, type = "success") {
-
-    const message = document.getElementById("message");
-
-    message.className = type;
-
-    message.innerHTML = text;
-
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
+
+/* =========================================================
+   数字解析
+========================================================= */
+
+function parseNumber(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return 0;
+    }
+
+    let text = String(value)
+        .trim()
+        .replace(/,/g, "")
+        .replace(/\s/g, "");
+
+    if (!text) {
+        return 0;
+    }
+
+    const number = parseInt(text, 10);
+
+    return isNaN(number) ? 0 : number;
+}
+
+
+/* =========================================================
+   金额解析
+   支持：
+   HK$7,739.00
+   -HK$6,389.00
+   $100.00
+   ￥100.00
+   -￥100.00
+========================================================= */
 
 function parseMoney(value) {
 
-    if (!value) return 0;
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return 0;
+    }
 
-    value = value
-        .replace(/￥/g, "")
-        .replace(/\$/g, "")
-        .replace(/,/g, "")
-        .replace(/\s/g, "")
+    let text = String(value)
+        .trim()
+        .replace(/\s/g, "");
+
+    if (!text) {
+        return 0;
+    }
+
+    const negative = text.includes("-");
+
+    /*
+       删除货币符号：
+
+       HK$
+       US$
+       SG$
+       A$
+       C$
+       $
+       ￥
+       ¥
+       €
+       £
+       ₩
+    */
+
+    text = text.replace(/[^0-9.]/g, "");
+
+    if (!text) {
+        return 0;
+    }
+
+    const number = parseFloat(text);
+
+    if (isNaN(number)) {
+        return 0;
+    }
+
+    return negative ? -number : number;
+}
+
+
+/* =========================================================
+   金额显示
+========================================================= */
+
+function formatMoney(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        isNaN(value)
+    ) {
+        return "-";
+    }
+
+    const number = Number(value);
+
+    const prefix =
+        number < 0 ? "-HK$" : "HK$";
+
+    return (
+        prefix +
+        Math.abs(number).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        )
+    );
+}
+
+
+/* =========================================================
+   判断是否为金额
+========================================================= */
+
+function looksLikeMoney(value) {
+
+    if (!value) {
+        return false;
+    }
+
+    return (
+        /[$£€¥￥₩]/.test(value) ||
+        /HK\$/i.test(value) ||
+        /US\$/i.test(value) ||
+        /SG\$/i.test(value) ||
+        /A\$/i.test(value) ||
+        /C\$/i.test(value) ||
+        /^\-?[\d,]+\.\d{2}$/.test(
+            value.trim()
+        )
+    );
+}
+
+
+/* =========================================================
+   清理 Referral 名称
+========================================================= */
+
+function cleanReferralName(value) {
+
+    let name = String(value || "").trim();
+
+    /*
+       如果复制内容中出现一些多余符号
+       自动清除
+    */
+
+    name = name
+        .replace(/^\|+/, "")
+        .replace(/\|+$/, "")
         .trim();
 
-    const number = parseFloat(value);
-
-    return isNaN(number) ? 0 : number;
+    return name;
 }
 
 
-function parseOrders(value) {
+/* =========================================================
+   判断是否为 Referral Name
+========================================================= */
 
-    if (!value) return 0;
+function looksLikeReferralName(value) {
 
-    const number = parseInt(
-        value.replace(/,/g, "").trim()
-    );
+    if (!value) {
+        return false;
+    }
 
-    return isNaN(number) ? 0 : number;
+    const text = value.trim();
+
+    if (!text) {
+        return false;
+    }
+
+    const lower = text.toLowerCase();
+
+    /*
+       明确排除一些 IGG 页面固定文字
+    */
+
+    const excluded = [
+        "display name",
+        "status",
+        "new orders",
+        "1 day",
+        "7 days",
+        "income",
+        "total",
+        "copy link",
+        "deactivate"
+    ];
+
+    if (excluded.includes(lower)) {
+        return false;
+    }
+
+    if (looksLikeMoney(text)) {
+        return false;
+    }
+
+    if (/^\d+$/.test(text)) {
+        return false;
+    }
+
+    return true;
 }
 
 
-function parseIGG(text) {
+/* =========================================================
+   核心解析函数
+========================================================= */
 
-    const lines = text
-        .split(/\r?\n/)
+function parseIGG(rawText) {
+
+    if (!rawText || !rawText.trim()) {
+        return [];
+    }
+
+    /*
+       统一换行
+    */
+
+    let lines = rawText
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .split("\n")
         .map(line => line.trim())
-        .filter(line => line);
+        .filter(line => line !== "");
+
+
+    /*
+       如果用户复制的是 Markdown 表格，
+       也支持：
+
+       | name | active | 1 | HK$... |
+
+    */
+
+    const hasTableRows =
+        lines.some(line => {
+            return (
+                line.startsWith("|") &&
+                line.endsWith("|")
+            );
+        });
+
+
+    if (hasTableRows) {
+
+        return parseTableFormat(lines);
+
+    }
+
+
+    /*
+       正常 IGG 复制格式：
+
+       name
+       active
+       1
+       HK$100
+       HK$100
+       HK$100
+       HK$100
+       Copy linkDeactivate
+
+       name
+       active
+       ...
+    */
 
     const rows = [];
 
-    for (let line of lines) {
+    let i = 0;
+
+
+    while (i < lines.length) {
+
+        const name = cleanReferralName(lines[i]);
+
+
+        /*
+           找到可能的 Referral Name
+        */
+
+        if (!looksLikeReferralName(name)) {
+            i++;
+            continue;
+        }
+
+
+        /*
+           找 status
+        */
+
+        if (i + 6 >= lines.length) {
+            i++;
+            continue;
+        }
+
+
+        const status =
+            lines[i + 1];
+
+
+        const ordersText =
+            lines[i + 2];
+
+
+        const day1Text =
+            lines[i + 3];
+
+
+        const day7Text =
+            lines[i + 4];
+
+
+        const incomeText =
+            lines[i + 5];
+
+
+        const totalText =
+            lines[i + 6];
+
+
+        /*
+           判断这一组是不是合法 Referral
+        */
+
+        const validStatus =
+            /^(active|inactive|deactivated)$/i
+                .test(status);
+
+
+        const validOrders =
+            /^-?\d[\d,]*$/
+                .test(
+                    ordersText.replace(/\s/g, "")
+                );
+
+
+        const validMoney =
+            looksLikeMoney(day1Text) &&
+            looksLikeMoney(day7Text) &&
+            looksLikeMoney(incomeText) &&
+            looksLikeMoney(totalText);
+
 
         if (
-            line.toLowerCase().includes("display name") &&
-            line.toLowerCase().includes("new orders")
+            validStatus &&
+            validOrders &&
+            validMoney
+        ) {
+
+            rows.push({
+
+                name: name,
+
+                status: status,
+
+                orders:
+                    parseNumber(ordersText),
+
+                day1:
+                    parseMoney(day1Text),
+
+                day7:
+                    parseMoney(day7Text),
+
+                income:
+                    parseMoney(incomeText),
+
+                total:
+                    parseMoney(totalText)
+
+            });
+
+
+            /*
+               跳过：
+
+               name
+               status
+               orders
+               1 day
+               7 days
+               income
+               total
+            */
+
+            i += 7;
+
+
+            /*
+               跳过 Copy linkDeactivate
+            */
+
+            if (
+                i < lines.length &&
+                lines[i]
+                    .toLowerCase()
+                    .includes("copy link")
+            ) {
+
+                i++;
+
+            }
+
+
+            /*
+               有些情况下：
+
+               Copy link
+               Deactivate
+
+            */
+
+            if (
+                i < lines.length &&
+                lines[i]
+                    .toLowerCase()
+                    .trim() === "deactivate"
+            ) {
+
+                i++;
+
+            }
+
+
+            continue;
+
+        }
+
+
+        i++;
+
+    }
+
+
+    return rows;
+}
+
+
+/* =========================================================
+   Markdown / 表格格式解析
+========================================================= */
+
+function parseTableFormat(lines) {
+
+    const rows = [];
+
+    for (const line of lines) {
+
+        if (!line.includes("|")) {
+            continue;
+        }
+
+        let cells =
+            line.split("|")
+                .map(x => x.trim())
+                .filter(x => x !== "");
+
+
+        if (cells.length < 7) {
+            continue;
+        }
+
+
+        /*
+           跳过表头
+        */
+
+        const first =
+            cells[0].toLowerCase();
+
+        if (
+            first === "display name" ||
+            first === "name"
         ) {
             continue;
         }
 
-        let parts;
 
-        if (line.includes("\t")) {
+        /*
+           跳过 Markdown 分隔线
 
-            parts = line.split("\t");
-
-        } else if (line.includes("|")) {
-
-            parts = line
-                .split("|")
-                .map(x => x.trim());
-
-        } else {
-
-            continue;
-        }
-
-        parts = parts
-            .map(x => x.trim())
-            .filter(x => x !== "");
-
-        if (parts.length < 7) continue;
-
-        const name = parts[0];
+           |---|---|---|
+        */
 
         if (
-            !name ||
-            name.toLowerCase() === "display name"
+            cells.every(
+                x => /^[-:]+$/.test(x)
+            )
         ) {
             continue;
         }
+
+
+        const name =
+            cleanReferralName(cells[0]);
+
+
+        const status =
+            cells[1];
+
+
+        const orders =
+            parseNumber(cells[2]);
+
+
+        const day1 =
+            parseMoney(cells[3]);
+
+
+        const day7 =
+            parseMoney(cells[4]);
+
+
+        const income =
+            parseMoney(cells[5]);
+
+
+        const total =
+            parseMoney(cells[6]);
+
+
+        if (!name) {
+            continue;
+        }
+
 
         rows.push({
 
-            name: name,
-
-            status: parts[1],
-
-            orders: parseOrders(parts[2]),
-
-            oneDay: parseMoney(parts[3]),
-
-            sevenDays: parseMoney(parts[4]),
-
-            income: parseMoney(parts[5]),
-
-            total: parseMoney(parts[6])
+            name,
+            status,
+            orders,
+            day1,
+            day7,
+            income,
+            total
 
         });
 
     }
 
     return rows;
-
 }
 
+
+/* =========================================================
+   LocalStorage
+========================================================= */
 
 function getSnapshots() {
 
     try {
 
-        return JSON.parse(
-            localStorage.getItem(STORAGE_KEY) || "[]"
-        );
+        const data =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
 
-    } catch {
+        if (!data) {
+            return [];
+        }
+
+        const parsed =
+            JSON.parse(data);
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    } catch (error) {
+
+        console.error(error);
 
         return [];
 
     }
-
 }
 
 
-function saveSnapshots(data) {
+function saveSnapshots(snapshots) {
 
     localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify(data)
+        JSON.stringify(snapshots)
     );
 
 }
 
 
-function getPreviousSnapshot(date) {
+/* =========================================================
+   获取指定项目指定日期之前最近的一次数据
+========================================================= */
 
-    const snapshots = getSnapshots();
+function getPreviousSnapshot(
+    project,
+    date
+) {
 
-    const previous = snapshots
-        .filter(x => x.date < date)
-        .sort((a,b) =>
-            b.date.localeCompare(a.date)
-        );
+    const snapshots =
+        getSnapshots();
+
+
+    const previous =
+        snapshots
+            .filter(item => {
+
+                return (
+                    item.project === project &&
+                    item.date < date
+                );
+
+            })
+            .sort(
+                (a, b) =>
+                    b.date.localeCompare(a.date)
+            );
+
 
     return previous.length
         ? previous[0]
         : null;
+}
+
+
+/* =========================================================
+   获取当天快照
+========================================================= */
+
+function getSameDaySnapshot(
+    project,
+    date
+) {
+
+    const snapshots =
+        getSnapshots();
+
+
+    return snapshots.find(item => {
+
+        return (
+            item.project === project &&
+            item.date === date
+        );
+
+    });
 
 }
 
 
-function parseData() {
+/* =========================================================
+   计算每日增量
+========================================================= */
 
-    const text =
-        document.getElementById("dataInput").value;
+function calculateDailyData(
+    currentRows,
+    previousSnapshot
+) {
 
-    const date =
-        document.getElementById("dataDate").value;
+    /*
+       如果没有前一天数据：
+
+       今日新增 = -
+
+       因为无法判断这些累计数据
+       是不是当天产生的。
+    */
+
+    if (!previousSnapshot) {
+
+        return currentRows.map(row => ({
+
+            ...row,
+
+            dailyOrders: null,
+
+            dailyRevenue: null
+
+        }));
+
+    }
+
+
+    const previousMap =
+        new Map();
+
+
+    previousSnapshot.rows.forEach(row => {
+
+        previousMap.set(
+            row.name,
+            row
+        );
+
+    });
+
+
+    return currentRows.map(row => {
+
+        const previous =
+            previousMap.get(row.name);
+
+
+        /*
+           如果这个 Referral 是今天才出现的：
+
+           不把它当前的全部累计数据
+           算成今日新增。
+
+        */
+
+        if (!previous) {
+
+            return {
+
+                ...row,
+
+                dailyOrders: null,
+
+                dailyRevenue: null
+
+            };
+
+        }
+
+
+        const dailyOrders =
+            row.orders -
+            previous.orders;
+
+
+        const dailyRevenue =
+            row.total -
+            previous.total;
+
+
+        return {
+
+            ...row,
+
+            dailyOrders,
+
+            dailyRevenue
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   保存今日数据
+========================================================= */
+
+function parseAndSave() {
 
     const project =
-        document.getElementById("projectName").value
-        .trim();
+        document.getElementById(
+            "projectName"
+        ).value.trim();
 
-    if (!text.trim()) {
+
+    const date =
+        document.getElementById(
+            "dataDate"
+        ).value;
+
+
+    const rawData =
+        document.getElementById(
+            "rawData"
+        ).value;
+
+
+    if (!project) {
 
         showMessage(
-            "请先把 IGG Referral Links 数据粘贴进来。",
-            "warning"
+            "请填写项目名称。",
+            "error"
         );
 
         return;
 
     }
+
 
     if (!date) {
 
         showMessage(
             "请选择数据日期。",
-            "warning"
+            "error"
         );
 
         return;
 
     }
 
-    const rows = parseIGG(text);
+
+    if (!rawData.trim()) {
+
+        showMessage(
+            "请先粘贴 IGG Referral 数据。",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const rows =
+        parseIGG(rawData);
+
 
     if (!rows.length) {
 
         showMessage(
-            "没有识别到有效数据。请确认你复制的是 IGG Referral Links 表格。",
-            "warning"
+            "没有识别到有效的 Referral 数据。请确认你是从 IGG Referral Links 页面直接复制。",
+            "error"
         );
 
         return;
 
     }
 
-    const snapshots = getSnapshots();
 
-    const previous =
-        getPreviousSnapshot(date);
+    /*
+       获取前一天数据
+    */
 
-    const previousMap = {};
+    const previousSnapshot =
+        getPreviousSnapshot(
+            project,
+            date
+        );
 
-    if (previous) {
 
-        previous.rows.forEach(row => {
+    /*
+       计算今日新增
+    */
 
-            previousMap[row.name] = row;
+    const dailyRows =
+        calculateDailyData(
+            rows,
+            previousSnapshot
+        );
 
-        });
 
-    }
-
-    let totalOrders = 0;
-
-    let totalRevenue = 0;
-
-    let newOrders = 0;
-
-    let newRevenue = 0;
-
-    rows.forEach(row => {
-
-        totalOrders += row.orders;
-
-        totalRevenue += row.total;
-
-        const old =
-            previousMap[row.name];
-
-        row.newOrders =
-            old
-                ? row.orders - old.orders
-                : null;
-
-        row.newRevenue =
-            old
-                ? row.total - old.total
-                : null;
-
-        if (row.newOrders !== null) {
-
-            newOrders += Math.max(
-                0,
-                row.newOrders
-            );
-
-        }
-
-        if (row.newRevenue !== null) {
-
-            newRevenue += Math.max(
-                0,
-                row.newRevenue
-            );
-
-        }
-
-    });
-
+    /*
+       生成新的快照
+    */
 
     const snapshot = {
 
-        date: date,
+        project,
 
-        project: project,
+        date,
 
-        rows: rows
+        createdAt:
+            new Date().toISOString(),
+
+        rows
 
     };
 
 
-    const sameDayIndex =
-        snapshots.findIndex(
-            x =>
-                x.date === date &&
-                x.project === project
-        );
+    /*
+       获取历史数据
+    */
+
+    let snapshots =
+        getSnapshots();
 
 
-    if (sameDayIndex >= 0) {
+    /*
+       如果当天已经存在：
 
-        snapshots[sameDayIndex] =
-            snapshot;
+       删除旧的当天数据
+       再保存新的
 
-    } else {
+       防止重复累计
+    */
 
-        snapshots.push(snapshot);
+    snapshots =
+        snapshots.filter(item => {
 
-    }
+            return !(
+                item.project === project &&
+                item.date === date
+            );
+
+        });
+
+
+    snapshots.push(snapshot);
+
+
+    /*
+       按日期排序
+    */
+
+    snapshots.sort(
+        (a, b) =>
+            a.date.localeCompare(b.date)
+    );
 
 
     saveSnapshots(snapshots);
 
-    renderResult(
-        rows,
-        totalOrders,
-        totalRevenue,
-        newOrders,
-        newRevenue,
-        previous
+
+    /*
+       显示结果
+    */
+
+    renderData(
+        dailyRows,
+        date
     );
 
 
-    if (previous) {
+    renderHistory();
+
+
+    showMessage(
+        `解析成功！已识别 ${rows.length} 条 Referral，并保存 ${date} 的数据。`,
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   仅解析预览
+========================================================= */
+
+function parsePreview() {
+
+    const rawData =
+        document.getElementById(
+            "rawData"
+        ).value;
+
+
+    if (!rawData.trim()) {
 
         showMessage(
-            `数据保存成功！已与 ${previous.date} 的数据进行对比。`
+            "请先粘贴 IGG 数据。",
+            "error"
         );
 
-    } else {
-
-        showMessage(
-            "数据保存成功！这是这个项目的第一份数据，因此暂时无法计算今日新增。",
-            "warning"
-        );
+        return;
 
     }
 
-}
+
+    const rows =
+        parseIGG(rawData);
 
 
-function formatMoney(value) {
+    if (!rows.length) {
 
-    return "￥" +
-        Number(value || 0)
-        .toLocaleString(
-            "zh-CN",
-            {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }
+        showMessage(
+            "没有识别到有效数据。",
+            "error"
         );
 
+        return;
+
+    }
+
+
+    /*
+       没有保存，只做展示
+    */
+
+    const date =
+        document.getElementById(
+            "dataDate"
+        ).value;
+
+
+    const project =
+        document.getElementById(
+            "projectName"
+        ).value.trim();
+
+
+    const previous =
+        getPreviousSnapshot(
+            project,
+            date
+        );
+
+
+    const dailyRows =
+        calculateDailyData(
+            rows,
+            previous
+        );
+
+
+    renderData(
+        dailyRows,
+        date
+    );
+
+
+    showMessage(
+        `解析成功，共识别 ${rows.length} 条 Referral。当前为预览模式，尚未保存。`,
+        "info"
+    );
+
 }
 
 
-function renderResult(
+/* =========================================================
+   渲染数据
+========================================================= */
+
+function renderData(
     rows,
-    totalOrders,
-    totalRevenue,
-    newOrders,
-    newRevenue,
-    previous
+    date
 ) {
 
-    document
-        .getElementById("result")
-        .classList.remove("hidden");
-
-    document
-        .getElementById("linkCount")
-        .innerText = rows.length;
-
-    document
-        .getElementById("totalOrders")
-        .innerText =
-            totalOrders.toLocaleString();
-
-    document
-        .getElementById("newOrders")
-        .innerText =
-            previous
-                ? newOrders.toLocaleString()
-                : "-";
-
-    document
-        .getElementById("newRevenue")
-        .innerText =
-            previous
-                ? formatMoney(newRevenue)
-                : "-";
-
-
     const tbody =
-        document.getElementById("tableBody");
-
-    tbody.innerHTML = "";
-
-
-    rows.forEach(row => {
-
-        const tr =
-            document.createElement("tr");
-
-        const newOrdersText =
-            row.newOrders === null
-                ? "-"
-                : row.newOrders.toLocaleString();
-
-        const newRevenueText =
-            row.newRevenue === null
-                ? "-"
-                : formatMoney(row.newRevenue);
+        document.getElementById(
+            "dataTableBody"
+        );
 
 
-        tr.innerHTML = `
+    if (!rows.length) {
 
-            <td>${escapeHtml(row.name)}</td>
-
-            <td>${escapeHtml(row.status)}</td>
-
-            <td>${row.orders.toLocaleString()}</td>
-
-            <td>${formatMoney(row.total)}</td>
-
-            <td>${newOrdersText}</td>
-
-            <td>${newRevenueText}</td>
-
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="empty">
+                    暂无数据
+                </td>
+            </tr>
         `;
 
-        tbody.appendChild(tr);
+        return;
 
-    });
+    }
+
+
+    /*
+       KPI
+    */
+
+    const totalOrders =
+        rows.reduce(
+            (sum, row) =>
+                sum + row.orders,
+            0
+        );
+
+
+    const totalRevenue =
+        rows.reduce(
+            (sum, row) =>
+                sum + row.total,
+            0
+        );
+
+
+    const dailyOrders =
+        rows.reduce(
+            (sum, row) =>
+                sum +
+                (
+                    row.dailyOrders === null
+                        ? 0
+                        : row.dailyOrders
+                ),
+            0
+        );
+
+
+    const dailyRevenue =
+        rows.reduce(
+            (sum, row) =>
+                sum +
+                (
+                    row.dailyRevenue === null
+                        ? 0
+                        : row.dailyRevenue
+                ),
+            0
+        );
+
+
+    document.getElementById(
+        "kpiLinks"
+    ).textContent =
+        rows.length.toLocaleString();
+
+
+    document.getElementById(
+        "kpiOrders"
+    ).textContent =
+        totalOrders.toLocaleString();
+
+
+    document.getElementById(
+        "kpiRevenue"
+    ).textContent =
+        formatMoney(totalRevenue);
+
+
+    document.getElementById(
+        "kpiDailyRevenue"
+    ).textContent =
+        dailyRowsHaveData(rows)
+            ? formatMoney(dailyRevenue)
+            : "-";
+
+
+    document.getElementById(
+        "tableInfo"
+    ).textContent =
+        `${date} · ${rows.length} 条 Referral · 今日新增订单 ${dailyRowsHaveData(rows) ? dailyOrders.toLocaleString() : "-"}`;
+
+
+    /*
+       表格
+    */
+
+    tbody.innerHTML =
+        rows.map(row => {
+
+            const dailyOrderText =
+                row.dailyOrders === null
+                    ? "-"
+                    : row.dailyOrders.toLocaleString();
+
+
+            const dailyRevenueText =
+                row.dailyRevenue === null
+                    ? "-"
+                    : formatMoney(
+                        row.dailyRevenue
+                    );
+
+
+            let dailyRevenueClass = "";
+
+            if (
+                row.dailyRevenue !== null
+            ) {
+
+                if (
+                    row.dailyRevenue > 0
+                ) {
+
+                    dailyRevenueClass =
+                        "positive";
+
+                }
+
+                if (
+                    row.dailyRevenue < 0
+                ) {
+
+                    dailyRevenueClass =
+                        "negative";
+
+                }
+
+            }
+
+
+            return `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(row.name)}
+                    </td>
+
+                    <td>
+                        <span class="status">
+                            ${escapeHtml(row.status)}
+                        </span>
+                    </td>
+
+                    <td class="number">
+                        ${row.orders.toLocaleString()}
+                    </td>
+
+                    <td class="number">
+                        ${formatMoney(row.day1)}
+                    </td>
+
+                    <td class="number">
+                        ${formatMoney(row.day7)}
+                    </td>
+
+                    <td class="number">
+                        ${formatMoney(row.total)}
+                    </td>
+
+                    <td class="number">
+                        ${dailyOrderText}
+                    </td>
+
+                    <td class="number ${dailyRevenueClass}">
+                        ${dailyRevenueText}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
 
 }
 
 
-function escapeHtml(text) {
+/* =========================================================
+   判断是否存在每日数据
+========================================================= */
 
-    const div =
-        document.createElement("div");
+function dailyRowsHaveData(rows) {
 
-    div.textContent = text;
-
-    return div.innerHTML;
+    return rows.some(
+        row =>
+            row.dailyOrders !== null ||
+            row.dailyRevenue !== null
+    );
 
 }
+
+
+/* =========================================================
+   查看最近数据
+========================================================= */
+
+function loadLatest() {
+
+    const project =
+        document.getElementById(
+            "projectName"
+        ).value.trim();
+
+
+    const snapshots =
+        getSnapshots()
+            .filter(
+                item =>
+                    item.project === project
+            )
+            .sort(
+                (a, b) =>
+                    b.date.localeCompare(a.date)
+            );
+
+
+    if (!snapshots.length) {
+
+        showMessage(
+            "目前还没有这个项目的历史数据。",
+            "info"
+        );
+
+        return;
+
+    }
+
+
+    const latest =
+        snapshots[0];
+
+
+    const previous =
+        getPreviousSnapshot(
+            project,
+            latest.date
+        );
+
+
+    const rows =
+        calculateDailyData(
+            latest.rows,
+            previous
+        );
+
+
+    document.getElementById(
+        "dataDate"
+    ).value =
+        latest.date;
+
+
+    renderData(
+        rows,
+        latest.date
+    );
+
+
+    showMessage(
+        `已加载最近一次数据：${latest.date}`,
+        "info"
+    );
+
+}
+
+
+/* =========================================================
+   清空输入
+========================================================= */
+
+function clearInput() {
+
+    document.getElementById(
+        "rawData"
+    ).value = "";
+
+    document.getElementById(
+        "dataTableBody"
+    ).innerHTML = `
+        <tr>
+            <td colspan="8" class="empty">
+                暂无数据
+            </td>
+        </tr>
+    `;
+
+    document.getElementById(
+        "kpiLinks"
+    ).textContent = "-";
+
+    document.getElementById(
+        "kpiOrders"
+    ).textContent = "-";
+
+    document.getElementById(
+        "kpiRevenue"
+    ).textContent = "-";
+
+    document.getElementById(
+        "kpiDailyRevenue"
+    ).textContent = "-";
+
+    document.getElementById(
+        "tableInfo"
+    ).textContent =
+        "尚未解析数据";
+
+}
+
+
+/* =========================================================
+   历史记录
+========================================================= */
+
+function renderHistory() {
+
+    const project =
+        document.getElementById(
+            "projectName"
+        ).value.trim();
+
+
+    const snapshots =
+        getSnapshots()
+            .filter(
+                item =>
+                    item.project === project
+            )
+            .sort(
+                (a, b) =>
+                    b.date.localeCompare(a.date)
+            );
+
+
+    const container =
+        document.getElementById(
+            "historyList"
+        );
+
+
+    if (!snapshots.length) {
+
+        container.innerHTML = `
+            <div class="empty">
+                暂无历史数据
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        snapshots.map(snapshot => {
+
+            const totalOrders =
+                snapshot.rows.reduce(
+                    (sum, row) =>
+                        sum + row.orders,
+                    0
+                );
+
+
+            const totalRevenue =
+                snapshot.rows.reduce(
+                    (sum, row) =>
+                        sum + row.total,
+                    0
+                );
+
+
+            return `
+                <div class="history-item">
+
+                    <div>
+
+                        <div class="history-date">
+                            ${escapeHtml(snapshot.date)}
+                        </div>
+
+                        <div class="small">
+                            ${snapshot.rows.length} 条 Referral
+                        </div>
+
+                    </div>
+
+                    <div class="small">
+                        ${totalOrders.toLocaleString()} orders
+                        ·
+                        ${formatMoney(totalRevenue)}
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================================================
+   清空历史
+========================================================= */
+
+function clearHistory() {
+
+    const project =
+        document.getElementById(
+            "projectName"
+        ).value.trim();
+
+
+    const confirmed =
+        confirm(
+            `确定要删除「${project}」的全部历史数据吗？\n\n这个操作无法恢复。`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    let snapshots =
+        getSnapshots();
+
+
+    snapshots =
+        snapshots.filter(
+            item =>
+                item.project !== project
+        );
+
+
+    saveSnapshots(snapshots);
+
+
+    renderHistory();
+
+
+    showMessage(
+        `已清空「${project}」的历史数据。`,
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   项目名称改变时刷新历史
+========================================================= */
+
+document
+    .getElementById("projectName")
+    .addEventListener(
+        "input",
+        function() {
+
+            renderHistory();
+
+        }
+    );
+
+
+/* =========================================================
+   页面打开时加载历史
+========================================================= */
+
+renderHistory();
 
 </script>
 
