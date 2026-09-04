@@ -1,14 +1,724 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>IGG Referral Tracker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGG Referral Tracker</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background: #f5f7fb;
+        color: #1f2937;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 24px;
+    }
+
+    h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+    }
+
+    .subtitle {
+        color: #6b7280;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        font-family: inherit;
+    }
+
+    textarea {
+        min-height: 260px;
+        resize: vertical;
+    }
+
+    .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    button {
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #111827;
+        color: white;
+        margin-top: 16px;
+    }
+
+    button:hover {
+        opacity: 0.85;
+    }
+
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .kpi {
+        background: white;
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .kpi-title {
+        color: #6b7280;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .kpi-value {
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+    }
+
+    th {
+        color: #6b7280;
+        font-weight: 600;
+        background: #f9fafb;
+    }
+
+    .success {
+        padding: 12px 16px;
+        background: #ecfdf5;
+        color: #047857;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .warning {
+        padding: 12px 16px;
+        background: #fff7ed;
+        color: #c2410c;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    @media (max-width: 800px) {
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 </head>
 
 <body>
 
-<h1>IGG Referral Tracker</h1>
+<div class="container">
 
-<p>这是我的第一个网站</p>
+    <h1>IGG Referral Tracker</h1>
+    <div class="subtitle">
+        Indiegogo Referral Links 数据追踪工具
+    </div>
+
+    <div id="message"></div>
+
+    <div class="card">
+
+        <div class="row">
+
+            <div>
+                <label>项目名称</label>
+                <input id="projectName" value="HOVERAir VERSA">
+            </div>
+
+            <div>
+                <label>数据日期</label>
+                <input id="dataDate" type="date">
+            </div>
+
+        </div>
+
+        <div style="margin-top:24px;">
+
+            <label>
+                粘贴 IGG Referral Links 数据
+            </label>
+
+            <textarea
+                id="dataInput"
+                placeholder="从 IGG 后台复制 Referral Links 数据，然后粘贴到这里..."
+            ></textarea>
+
+            <button onclick="parseData()">
+                解析并保存今日数据
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="result" class="hidden">
+
+        <div class="kpi-grid">
+
+            <div class="kpi">
+                <div class="kpi-title">Referral Links</div>
+                <div class="kpi-value" id="linkCount">0</div>
+            </div>
+
+            <div class="kpi">
+                <div class="kpi-title">累计订单</div>
+                <div class="kpi-value" id="totalOrders">0</div>
+            </div>
+
+            <div class="kpi">
+                <div class="kpi-title">今日新增订单</div>
+                <div class="kpi-value" id="newOrders">-</div>
+            </div>
+
+            <div class="kpi">
+                <div class="kpi-title">今日新增金额</div>
+                <div class="kpi-value" id="newRevenue">-</div>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Referral Links 数据</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Display name</th>
+                        <th>Status</th>
+                        <th>累计订单</th>
+                        <th>累计收入</th>
+                        <th>今日新增订单</th>
+                        <th>今日新增收入</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const STORAGE_KEY = "igg_referral_snapshots";
+
+function setToday() {
+
+    const today = new Date();
+
+    const year = today.getFullYear();
+
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+
+    const day = String(today.getDate()).padStart(2, "0");
+
+    document.getElementById("dataDate").value =
+        `${year}-${month}-${day}`;
+}
+
+setToday();
+
+
+function showMessage(text, type = "success") {
+
+    const message = document.getElementById("message");
+
+    message.className = type;
+
+    message.innerHTML = text;
+
+}
+
+
+function parseMoney(value) {
+
+    if (!value) return 0;
+
+    value = value
+        .replace(/￥/g, "")
+        .replace(/\$/g, "")
+        .replace(/,/g, "")
+        .replace(/\s/g, "")
+        .trim();
+
+    const number = parseFloat(value);
+
+    return isNaN(number) ? 0 : number;
+}
+
+
+function parseOrders(value) {
+
+    if (!value) return 0;
+
+    const number = parseInt(
+        value.replace(/,/g, "").trim()
+    );
+
+    return isNaN(number) ? 0 : number;
+}
+
+
+function parseIGG(text) {
+
+    const lines = text
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(line => line);
+
+    const rows = [];
+
+    for (let line of lines) {
+
+        if (
+            line.toLowerCase().includes("display name") &&
+            line.toLowerCase().includes("new orders")
+        ) {
+            continue;
+        }
+
+        let parts;
+
+        if (line.includes("\t")) {
+
+            parts = line.split("\t");
+
+        } else if (line.includes("|")) {
+
+            parts = line
+                .split("|")
+                .map(x => x.trim());
+
+        } else {
+
+            continue;
+        }
+
+        parts = parts
+            .map(x => x.trim())
+            .filter(x => x !== "");
+
+        if (parts.length < 7) continue;
+
+        const name = parts[0];
+
+        if (
+            !name ||
+            name.toLowerCase() === "display name"
+        ) {
+            continue;
+        }
+
+        rows.push({
+
+            name: name,
+
+            status: parts[1],
+
+            orders: parseOrders(parts[2]),
+
+            oneDay: parseMoney(parts[3]),
+
+            sevenDays: parseMoney(parts[4]),
+
+            income: parseMoney(parts[5]),
+
+            total: parseMoney(parts[6])
+
+        });
+
+    }
+
+    return rows;
+
+}
+
+
+function getSnapshots() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(STORAGE_KEY) || "[]"
+        );
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveSnapshots(data) {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+
+function getPreviousSnapshot(date) {
+
+    const snapshots = getSnapshots();
+
+    const previous = snapshots
+        .filter(x => x.date < date)
+        .sort((a,b) =>
+            b.date.localeCompare(a.date)
+        );
+
+    return previous.length
+        ? previous[0]
+        : null;
+
+}
+
+
+function parseData() {
+
+    const text =
+        document.getElementById("dataInput").value;
+
+    const date =
+        document.getElementById("dataDate").value;
+
+    const project =
+        document.getElementById("projectName").value
+        .trim();
+
+    if (!text.trim()) {
+
+        showMessage(
+            "请先把 IGG Referral Links 数据粘贴进来。",
+            "warning"
+        );
+
+        return;
+
+    }
+
+    if (!date) {
+
+        showMessage(
+            "请选择数据日期。",
+            "warning"
+        );
+
+        return;
+
+    }
+
+    const rows = parseIGG(text);
+
+    if (!rows.length) {
+
+        showMessage(
+            "没有识别到有效数据。请确认你复制的是 IGG Referral Links 表格。",
+            "warning"
+        );
+
+        return;
+
+    }
+
+    const snapshots = getSnapshots();
+
+    const previous =
+        getPreviousSnapshot(date);
+
+    const previousMap = {};
+
+    if (previous) {
+
+        previous.rows.forEach(row => {
+
+            previousMap[row.name] = row;
+
+        });
+
+    }
+
+    let totalOrders = 0;
+
+    let totalRevenue = 0;
+
+    let newOrders = 0;
+
+    let newRevenue = 0;
+
+    rows.forEach(row => {
+
+        totalOrders += row.orders;
+
+        totalRevenue += row.total;
+
+        const old =
+            previousMap[row.name];
+
+        row.newOrders =
+            old
+                ? row.orders - old.orders
+                : null;
+
+        row.newRevenue =
+            old
+                ? row.total - old.total
+                : null;
+
+        if (row.newOrders !== null) {
+
+            newOrders += Math.max(
+                0,
+                row.newOrders
+            );
+
+        }
+
+        if (row.newRevenue !== null) {
+
+            newRevenue += Math.max(
+                0,
+                row.newRevenue
+            );
+
+        }
+
+    });
+
+
+    const snapshot = {
+
+        date: date,
+
+        project: project,
+
+        rows: rows
+
+    };
+
+
+    const sameDayIndex =
+        snapshots.findIndex(
+            x =>
+                x.date === date &&
+                x.project === project
+        );
+
+
+    if (sameDayIndex >= 0) {
+
+        snapshots[sameDayIndex] =
+            snapshot;
+
+    } else {
+
+        snapshots.push(snapshot);
+
+    }
+
+
+    saveSnapshots(snapshots);
+
+    renderResult(
+        rows,
+        totalOrders,
+        totalRevenue,
+        newOrders,
+        newRevenue,
+        previous
+    );
+
+
+    if (previous) {
+
+        showMessage(
+            `数据保存成功！已与 ${previous.date} 的数据进行对比。`
+        );
+
+    } else {
+
+        showMessage(
+            "数据保存成功！这是这个项目的第一份数据，因此暂时无法计算今日新增。",
+            "warning"
+        );
+
+    }
+
+}
+
+
+function formatMoney(value) {
+
+    return "￥" +
+        Number(value || 0)
+        .toLocaleString(
+            "zh-CN",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+function renderResult(
+    rows,
+    totalOrders,
+    totalRevenue,
+    newOrders,
+    newRevenue,
+    previous
+) {
+
+    document
+        .getElementById("result")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("linkCount")
+        .innerText = rows.length;
+
+    document
+        .getElementById("totalOrders")
+        .innerText =
+            totalOrders.toLocaleString();
+
+    document
+        .getElementById("newOrders")
+        .innerText =
+            previous
+                ? newOrders.toLocaleString()
+                : "-";
+
+    document
+        .getElementById("newRevenue")
+        .innerText =
+            previous
+                ? formatMoney(newRevenue)
+                : "-";
+
+
+    const tbody =
+        document.getElementById("tableBody");
+
+    tbody.innerHTML = "";
+
+
+    rows.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+        const newOrdersText =
+            row.newOrders === null
+                ? "-"
+                : row.newOrders.toLocaleString();
+
+        const newRevenueText =
+            row.newRevenue === null
+                ? "-"
+                : formatMoney(row.newRevenue);
+
+
+        tr.innerHTML = `
+
+            <td>${escapeHtml(row.name)}</td>
+
+            <td>${escapeHtml(row.status)}</td>
+
+            <td>${row.orders.toLocaleString()}</td>
+
+            <td>${formatMoney(row.total)}</td>
+
+            <td>${newOrdersText}</td>
+
+            <td>${newRevenueText}</td>
+
+        `;
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+</script>
 
 </body>
 </html>
