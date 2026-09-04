@@ -3,476 +3,501 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>IGG Referral Tracker</title>
 
 <style>
-:root{
-  --bg:#f5f7fb;
-  --card:#ffffff;
-  --text:#172033;
-  --muted:#7b8496;
-  --line:#e7ebf2;
-  --primary:#4f6ef7;
-  --primary-light:#eef2ff;
-  --green:#16a36a;
-  --red:#e05252;
-  --orange:#ef9b3e;
-  --shadow:0 4px 18px rgba(30,45,80,.06);
+* {
+  box-sizing: border-box;
 }
 
-*{
-  box-sizing:border-box;
+body {
+  margin: 0;
+  background: #f5f7fb;
+  color: #172033;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "PingFang SC",
+    "Microsoft YaHei",
+    Arial,
+    sans-serif;
 }
 
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",
-  "Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+.container {
+  width: min(1400px, calc(100% - 40px));
+  margin: 0 auto;
 }
 
-.container{
-  max-width:1400px;
-  margin:0 auto;
-  padding:28px 24px 60px;
+header {
+  padding: 36px 0 24px;
 }
 
-.header{
-  margin-bottom:24px;
+.header-title {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
-.header h1{
-  margin:0 0 8px;
-  font-size:30px;
-  font-weight:750;
-  letter-spacing:-.5px;
+.header-subtitle {
+  color: #6b7280;
+  font-size: 14px;
 }
 
-.header p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
+/* Upload */
+
+.upload-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 15px rgba(20, 30, 50, 0.04);
 }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-shadow:var(--shadow);
+.upload-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 18px;
 }
 
-.upload-card{
-  padding:22px;
-  margin-bottom:20px;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
 }
 
-.upload-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:16px;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
-.upload-title{
-  font-size:18px;
-  font-weight:700;
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
 }
 
-.upload-desc{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:4px;
-}
-
-.controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
+input,
+textarea,
+button {
+  font-family: inherit;
 }
 
 input[type="text"],
-input[type="date"]{
-  border:1px solid #dce2ec;
-  border-radius:9px;
-  padding:10px 12px;
-  font-size:14px;
-  background:#fff;
-  outline:none;
+input[type="date"],
+textarea {
+  width: 100%;
+  border: 1px solid #d9dee8;
+  border-radius: 10px;
+  padding: 11px 13px;
+  font-size: 14px;
+  outline: none;
+  background: white;
 }
 
-input[type="text"]{
-  min-width:260px;
-  flex:1;
+input:focus,
+textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
 }
 
-input:focus{
-  border-color:var(--primary);
+textarea {
+  min-height: 190px;
+  resize: vertical;
+  line-height: 1.6;
+  margin-top: 15px;
 }
 
-textarea{
-  width:100%;
-  min-height:210px;
-  resize:vertical;
-  border:1px solid #dce2ec;
-  border-radius:10px;
-  padding:14px;
-  font-size:13px;
-  line-height:1.6;
-  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-  outline:none;
+.primary-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 20px;
+  background: #111827;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-textarea:focus{
-  border-color:var(--primary);
+.primary-btn:hover {
+  opacity: 0.9;
 }
 
-.button-row{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-  flex-wrap:wrap;
+.secondary-btn {
+  border: 1px solid #d9dee8;
+  background: white;
+  color: #374151;
+  border-radius: 9px;
+  padding: 8px 13px;
+  cursor: pointer;
 }
 
-button{
-  border:0;
-  border-radius:9px;
-  padding:10px 16px;
-  font-size:14px;
-  font-weight:650;
-  cursor:pointer;
+.hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #8a93a3;
 }
 
-.btn-primary{
-  background:var(--primary);
-  color:#fff;
+/* KPI */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.btn-secondary{
-  background:#eef1f6;
-  color:#39445a;
+.kpi-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
 }
 
-.btn-danger{
-  background:#fff0f0;
-  color:var(--red);
+.kpi-label {
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
-button:hover{
-  opacity:.9;
+.kpi-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
-.message{
-  margin-top:12px;
-  font-size:13px;
-  color:var(--muted);
+.kpi-sub {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #8a93a3;
 }
 
-.kpi-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-  margin-bottom:20px;
+/* Section */
+
+.section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
 }
 
-.kpi{
-  padding:20px;
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 18px;
 }
 
-.kpi-label{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:9px;
+.section-title {
+  font-size: 18px;
+  font-weight: 800;
 }
 
-.kpi-value{
-  font-size:27px;
-  font-weight:750;
-  letter-spacing:-.5px;
+.section-desc {
+  font-size: 12px;
+  color: #8a93a3;
+  margin-top: 4px;
 }
 
-.kpi-sub{
-  margin-top:6px;
-  color:var(--muted);
-  font-size:12px;
+/* Insight */
+
+.insight-box {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  line-height: 1.7;
+  font-size: 14px;
+  color: #374151;
 }
 
-.section{
-  margin-top:20px;
-  padding:22px;
+/* Table */
+
+.table-wrap {
+  overflow-x: auto;
 }
 
-.section-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-  margin-bottom:18px;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
 }
 
-.section-title{
-  font-size:18px;
-  font-weight:720;
+th {
+  background: #f8fafc;
+  color: #6b7280;
+  font-weight: 700;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
 }
 
-.section-desc{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:4px;
+td {
+  padding: 13px 12px;
+  border-bottom: 1px solid #eef0f4;
+  white-space: nowrap;
 }
 
-.insight{
-  padding:18px 20px;
-  background:linear-gradient(135deg,#f4f6ff,#ffffff);
-  border:1px solid #dfe5ff;
-  border-radius:14px;
-  margin-bottom:20px;
+tbody tr:hover {
+  background: #fafbfc;
 }
 
-.insight-title{
-  font-weight:700;
-  margin-bottom:10px;
+.channel-row {
+  cursor: pointer;
 }
 
-.insight-list{
-  display:grid;
-  gap:7px;
-  color:#4d5870;
-  font-size:13px;
+.channel-name {
+  font-weight: 700;
 }
 
-.channel-table{
-  width:100%;
-  border-collapse:collapse;
+.channel-arrow {
+  display: inline-block;
+  width: 18px;
+  color: #8a93a3;
 }
 
-.channel-table th{
-  text-align:left;
-  color:var(--muted);
-  font-size:12px;
-  font-weight:600;
-  padding:11px 10px;
-  border-bottom:1px solid var(--line);
-  white-space:nowrap;
+.number-positive {
+  color: #15803d;
+  font-weight: 700;
 }
 
-.channel-table td{
-  padding:14px 10px;
-  border-bottom:1px solid #f0f2f6;
-  font-size:13px;
-  vertical-align:middle;
+.number-negative {
+  color: #dc2626;
+  font-weight: 700;
 }
 
-.channel-row{
-  cursor:pointer;
-  transition:.15s;
+.detail-row {
+  display: none;
 }
 
-.channel-row:hover{
-  background:#fafbfe;
+.detail-row.open {
+  display: table-row;
 }
 
-.channel-name{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-weight:680;
+.detail-container {
+  background: #fafbfc;
+  padding: 14px 18px 18px 45px;
 }
 
-.chevron{
-  width:20px;
-  color:#8d96a8;
-  font-size:12px;
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.money{
-  font-variant-numeric:tabular-nums;
+.detail-table th {
+  background: transparent;
+  padding: 8px;
+  font-size: 12px;
 }
 
-.positive{
-  color:var(--green);
-  font-weight:650;
+.detail-table td {
+  padding: 9px 8px;
+  font-size: 12px;
 }
 
-.negative{
-  color:var(--red);
-  font-weight:650;
+/* Charts */
+
+.chart-box {
+  margin-top: 10px;
 }
 
-.neutral{
-  color:var(--muted);
+.chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
 
-.channel-detail{
-  display:none;
+.chart {
+  width: 100%;
+  height: 280px;
+  position: relative;
+  border-left: 1px solid #dfe3ea;
+  border-bottom: 1px solid #dfe3ea;
+  overflow: hidden;
 }
 
-.channel-detail.open{
-  display:table-row;
+.chart-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #edf0f4;
 }
 
-.detail-wrap{
-  padding:4px 0 14px 30px;
+.chart-label-y {
+  position: absolute;
+  left: -45px;
+  font-size: 10px;
+  color: #9ca3af;
+  transform: translateY(-50%);
 }
 
-.detail-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fafbfe;
-  border-radius:10px;
-  overflow:hidden;
+.chart-content {
+  position: absolute;
+  inset: 0;
+  padding: 15px 15px 0 15px;
 }
 
-.detail-table th{
-  font-size:11px;
-  color:var(--muted);
-  font-weight:600;
-  text-align:left;
-  padding:9px 10px;
-  border-bottom:1px solid var(--line);
+.svg-chart {
+  width: 100%;
+  height: 100%;
 }
 
-.detail-table td{
-  font-size:12px;
-  padding:10px;
-  border-bottom:1px solid #edf0f5;
+.axis-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 5px 0;
+  color: #9ca3af;
+  font-size: 10px;
+  gap: 10px;
 }
 
-.detail-table tr:last-child td{
-  border-bottom:0;
+.axis-labels span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.chart-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
+/* Bars */
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  height: 240px;
+  gap: 10px;
+  padding: 15px 10px 0;
+  border-bottom: 1px solid #dfe3ea;
 }
 
-.chart-card{
-  padding:20px;
+.bar-item {
+  flex: 1;
+  min-width: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  position: relative;
 }
 
-.chart-title{
-  font-size:15px;
-  font-weight:700;
-  margin-bottom:3px;
+.bar-value {
+  font-size: 9px;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 3px;
 }
 
-.chart-desc{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:14px;
+.bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 5px 5px 0 0;
+  background: #64748b;
 }
 
-.chart{
-  width:100%;
-  overflow-x:auto;
+.bar-label {
+  font-size: 9px;
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-svg{
-  width:100%;
-  min-width:680px;
-  display:block;
+/* Channel trend */
+
+.channel-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 14px;
 }
 
-.legend{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px 16px;
-  margin-top:12px;
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6b7280;
 }
 
-.legend-item{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:11px;
-  color:#5c6678;
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
 }
 
-.legend-dot{
-  width:9px;
-  height:9px;
-  border-radius:3px;
+/* History */
+
+.history-item {
+  border-bottom: 1px solid #eef0f4;
+  padding: 13px 0;
 }
 
-.history-table{
-  width:100%;
-  border-collapse:collapse;
+.history-item:last-child {
+  border-bottom: 0;
 }
 
-.history-table th,
-.history-table td{
-  padding:11px 10px;
-  border-bottom:1px solid var(--line);
-  text-align:left;
-  font-size:12px;
+.history-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.history-table th{
-  color:var(--muted);
-  font-weight:600;
+.history-date {
+  font-weight: 700;
 }
 
-.empty{
-  text-align:center;
-  padding:38px 20px;
-  color:var(--muted);
-  font-size:13px;
+.history-info {
+  font-size: 12px;
+  color: #6b7280;
 }
 
-.footer-note{
-  margin-top:20px;
-  color:#929aaa;
-  font-size:11px;
-  text-align:center;
+/* Empty */
+
+.empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 40px 10px;
+  font-size: 14px;
 }
 
-@media(max-width:900px){
-  .kpi-grid{
-    grid-template-columns:repeat(2,1fr);
+/* Responsive */
+
+@media (max-width: 900px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .chart-grid{
-    grid-template-columns:1fr;
+  .form-row {
+    grid-template-columns: 1fr;
   }
 }
 
-@media(max-width:600px){
-  .container{
-    padding:18px 12px 40px;
+@media (max-width: 600px) {
+  .container {
+    width: min(100% - 24px, 1400px);
   }
 
-  .header h1{
-    font-size:24px;
+  header {
+    padding-top: 24px;
   }
 
-  .kpi-grid{
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+  .header-title {
+    font-size: 24px;
   }
 
-  .kpi{
-    padding:15px;
-  }
-
-  .kpi-value{
-    font-size:21px;
+  .kpi-grid {
+    grid-template-columns: 1fr;
   }
 
   .section,
-  .upload-card{
-    padding:15px;
-  }
-
-  .channel-table{
-    min-width:900px;
-  }
-
-  .section{
-    overflow-x:auto;
+  .upload-card,
+  .kpi-card {
+    padding: 16px;
   }
 }
 </style>
@@ -482,221 +507,306 @@ svg{
 
 <div class="container">
 
-  <div class="header">
-    <h1>IGG Referral Tracker</h1>
-    <p>IGG 推荐链接出单追踪 · 累计数据 + 快照对比增量</p>
+<header>
+  <div class="header-title">IGG Referral Tracker</div>
+  <div class="header-subtitle">
+    Indiegogo Referral 数据追踪 · 累计数据 + 每日增量 + 渠道趋势
   </div>
+</header>
 
-  <!-- 上传区域 -->
-  <div class="card upload-card">
+<!-- Upload -->
 
-    <div class="upload-top">
-      <div>
-        <div class="upload-title">上传今日 IGG Referral 数据</div>
-        <div class="upload-desc">
-          直接复制 IGG Referral Links 页面内容粘贴即可，工具会自动识别 Referral。
-        </div>
-      </div>
-    </div>
+<div class="upload-card">
 
-    <div class="controls">
+  <div class="upload-title">导入今日 IGG Referral 数据</div>
+
+  <div class="form-row">
+
+    <div class="form-group">
+      <label>项目名称</label>
       <input
         id="projectInput"
         type="text"
-        placeholder="项目名称，例如 HOVERAir VERSA"
-      >
-
-      <input
-        id="dateInput"
-        type="date"
+        value="HOVERAir VERSA"
+        placeholder="例如：HOVERAir VERSA"
       >
     </div>
 
-    <textarea
-      id="dataInput"
-      placeholder="把 IGG Referral Links 页面中的数据全部复制到这里..."
-    ></textarea>
-
-    <div class="button-row">
-      <button class="btn-primary" onclick="importData()">
-        导入今日数据
-      </button>
-
-      <button class="btn-secondary" onclick="loadDemoData()">
-        查看示例
-      </button>
-
-      <button class="btn-danger" onclick="clearInput()">
-        清空输入
-      </button>
+    <div class="form-group">
+      <label>数据日期</label>
+      <input id="dateInput" type="date">
     </div>
 
-    <div id="message" class="message"></div>
+    <button class="primary-btn" onclick="importData()">
+      导入数据
+    </button>
 
   </div>
 
+  <textarea
+    id="dataInput"
+    placeholder="把 IGG Referral Links 页面复制的数据直接粘贴到这里即可。
 
-  <!-- KPI -->
-  <div class="kpi-grid">
+例如：
 
-    <div class="card kpi">
-      <div class="kpi-label">累计销售额</div>
-      <div class="kpi-value" id="kpiRevenue">—</div>
-      <div class="kpi-sub">当前最新快照</div>
-    </div>
+igg_weeklytop_260902
+active
+1
+HK$7,739.00
+HK$7,739.00
+HK$7,739.00
+HK$7,739.00
 
-    <div class="card kpi">
-      <div class="kpi-label">今日新增销售额</div>
-      <div class="kpi-value" id="kpiTodayRevenue">—</div>
-      <div class="kpi-sub" id="kpiRevenueChange">—</div>
-    </div>
+Meta_ads_US
+active
+0
+HK$0.00
+-HK$6,389.00
+HK$0.00
+-HK$6,389.00"
+  ></textarea>
 
-    <div class="card kpi">
-      <div class="kpi-label">累计订单</div>
-      <div class="kpi-value" id="kpiOrders">—</div>
-      <div class="kpi-sub">当前最新快照</div>
-    </div>
-
-    <div class="card kpi">
-      <div class="kpi-label">今日新增订单</div>
-      <div class="kpi-value" id="kpiTodayOrders">—</div>
-      <div class="kpi-sub" id="kpiOrdersChange">—</div>
-    </div>
-
+  <div class="hint">
+    支持直接复制 IGG Referral Links 页面中的连续文本。系统会自动识别 Referral Name、订单和销售额。
   </div>
 
+</div>
 
-  <!-- 自动分析 -->
-  <div class="card insight" id="insightCard">
-    <div class="insight-title">📊 数据概览</div>
-    <div class="insight-list" id="insightList">
-      <div>导入数据后，这里会自动生成表现分析。</div>
+
+<!-- KPI -->
+
+<div class="kpi-grid">
+
+  <div class="kpi-card">
+    <div class="kpi-label">累计销售额</div>
+    <div class="kpi-value" id="kpiTotalRevenue">HK$0</div>
+    <div class="kpi-sub">当前所有有效 Referral</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-label">今日新增销售额</div>
+    <div class="kpi-value" id="kpiTodayRevenue">HK$0</div>
+    <div class="kpi-sub" id="kpiRevenueSub">等待数据</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-label">累计订单</div>
+    <div class="kpi-value" id="kpiTotalOrders">0</div>
+    <div class="kpi-sub">当前所有有效 Referral</div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-label">今日新增订单</div>
+    <div class="kpi-value" id="kpiTodayOrders">0</div>
+    <div class="kpi-sub" id="kpiOrdersSub">等待数据</div>
+  </div>
+
+</div>
+
+
+<!-- Insight -->
+
+<div class="section">
+
+  <div class="section-header">
+    <div>
+      <div class="section-title">数据概览</div>
+      <div class="section-desc">根据当前快照与历史快照自动计算</div>
     </div>
   </div>
 
-
-  <!-- 渠道汇总 -->
-  <div class="card section">
-
-    <div class="section-header">
-      <div>
-        <div class="section-title">渠道表现</div>
-        <div class="section-desc">
-          点击渠道可展开查看该渠道下的 Referral 明细
-        </div>
-      </div>
-    </div>
-
-    <div id="channelContainer"></div>
-
+  <div class="insight-box" id="insightBox">
+    导入数据后，这里会自动生成渠道表现概览。
   </div>
 
+</div>
 
-  <!-- 整体趋势 -->
-  <div class="card section">
 
-    <div class="section-header">
-      <div>
-        <div class="section-title">整体每日趋势</div>
-        <div class="section-desc">
-          所有渠道合计，不区分渠道
-        </div>
+<!-- Channel Performance -->
+
+<div class="section">
+
+  <div class="section-header">
+
+    <div>
+      <div class="section-title">渠道表现</div>
+      <div class="section-desc">
+        点击渠道可展开查看对应 Referral 明细
       </div>
-    </div>
-
-    <div class="chart-grid">
-
-      <div class="card chart-card">
-        <div class="chart-title">每日新增销售额</div>
-        <div class="chart-desc">根据每日上传快照计算</div>
-        <div class="chart" id="overallRevenueChart"></div>
-      </div>
-
-      <div class="card chart-card">
-        <div class="chart-title">每日新增订单</div>
-        <div class="chart-desc">根据每日上传快照计算</div>
-        <div class="chart" id="overallOrdersChart"></div>
-      </div>
-
     </div>
 
   </div>
 
+  <div class="table-wrap">
 
-  <!-- 渠道趋势 -->
-  <div class="card section">
+    <table>
 
-    <div class="section-header">
-      <div>
-        <div class="section-title">渠道每日趋势</div>
-        <div class="section-desc">
-          所有渠道同时展示，不需要手动选择渠道
-        </div>
+      <thead>
+        <tr>
+          <th>渠道</th>
+          <th>Referral数</th>
+          <th>累计订单</th>
+          <th>累计销售额</th>
+          <th>今日新增订单</th>
+          <th>今日新增销售额</th>
+        </tr>
+      </thead>
+
+      <tbody id="channelTableBody">
+        <tr>
+          <td colspan="6">
+            <div class="empty">暂无数据</div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- Overall Daily Trend -->
+
+<div class="section">
+
+  <div class="section-header">
+
+    <div>
+      <div class="section-title">整体趋势</div>
+      <div class="section-desc">
+        每日整体新增销售额与新增订单
       </div>
-    </div>
-
-    <div class="chart-grid">
-
-      <div class="card chart-card">
-        <div class="chart-title">渠道每日新增销售额</div>
-        <div class="chart-desc">堆叠展示各渠道每天贡献</div>
-        <div class="chart" id="channelRevenueChart"></div>
-        <div class="legend" id="revenueLegend"></div>
-      </div>
-
-      <div class="card chart-card">
-        <div class="chart-title">渠道每日新增订单</div>
-        <div class="chart-desc">堆叠展示各渠道每天贡献</div>
-        <div class="chart" id="channelOrdersChart"></div>
-        <div class="legend" id="ordersLegend"></div>
-      </div>
-
     </div>
 
   </div>
 
+  <div class="chart-box">
 
-  <!-- Referral 明细 -->
-  <div class="card section">
+    <div class="chart-title">每日新增销售额</div>
 
-    <div class="section-header">
-      <div>
-        <div class="section-title">Referral 明细</div>
-        <div class="section-desc">
-          已隐藏累计订单和累计销售额均为 0 的 Referral
-        </div>
+    <div id="revenueTrend"></div>
+
+  </div>
+
+  <div class="chart-box" style="margin-top:30px;">
+
+    <div class="chart-title">每日新增订单</div>
+
+    <div id="ordersTrend"></div>
+
+  </div>
+
+</div>
+
+
+<!-- Channel Daily Trend -->
+
+<div class="section">
+
+  <div class="section-header">
+
+    <div>
+      <div class="section-title">渠道趋势</div>
+      <div class="section-desc">
+        每日各渠道新增销售额与订单表现
       </div>
     </div>
 
-    <div id="referralContainer"></div>
+  </div>
+
+  <div id="channelLegend" class="channel-legend"></div>
+
+  <div class="chart-box">
+
+    <div class="chart-title">各渠道每日新增销售额</div>
+
+    <div id="channelRevenueTrend"></div>
 
   </div>
 
+  <div class="chart-box" style="margin-top:30px;">
 
-  <!-- 历史记录 -->
-  <div class="card section">
+    <div class="chart-title">各渠道每日新增订单</div>
 
-    <div class="section-header">
-      <div>
-        <div class="section-title">历史快照</div>
-        <div class="section-desc">
-          每次导入的数据都会保存在当前浏览器中
-        </div>
+    <div id="channelOrdersTrend"></div>
+
+  </div>
+
+</div>
+
+
+<!-- Referral Detail -->
+
+<div class="section">
+
+  <div class="section-header">
+
+    <div>
+      <div class="section-title">Referral 明细</div>
+      <div class="section-desc">
+        仅显示累计订单或累计销售额大于 0 的 Referral
       </div>
-
-      <button class="btn-danger" onclick="clearHistory()">
-        清除历史数据
-      </button>
     </div>
 
-    <div id="historyContainer"></div>
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Referral</th>
+          <th>渠道</th>
+          <th>今日新增订单</th>
+          <th>今日新增销售额</th>
+          <th>累计订单</th>
+          <th>累计销售额</th>
+        </tr>
+      </thead>
+
+      <tbody id="referralTableBody">
+        <tr>
+          <td colspan="6">
+            <div class="empty">暂无数据</div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
 
   </div>
 
+</div>
 
-  <div class="footer-note">
-    数据保存在当前浏览器本地，不会自动同步到其他电脑或同事的浏览器。
+
+<!-- History -->
+
+<div class="section">
+
+  <div class="section-header">
+
+    <div>
+      <div class="section-title">历史快照</div>
+      <div class="section-desc">
+        每次导入的数据都会保存在当前浏览器
+      </div>
+    </div>
+
+    <button class="secondary-btn" onclick="clearHistory()">
+      清空历史
+    </button>
+
   </div>
+
+  <div id="historyList">
+    <div class="empty">暂无历史数据</div>
+  </div>
+
+</div>
+
 
 </div>
 
@@ -705,316 +815,551 @@ svg{
 
 const STORAGE_KEY = "igg_referral_snapshots";
 
-let currentSnapshot = null;
+let currentProject = "";
+let currentDate = "";
+let currentRecords = [];
 
 
 /* =========================
-   基础工具
+   初始化
 ========================= */
 
-function money(value){
-  if(value === null || value === undefined || isNaN(value)){
-    return "—";
-  }
+document.addEventListener("DOMContentLoaded", function () {
 
-  const num = Number(value);
+  const today = new Date();
 
-  return "HK$" + num.toLocaleString("en-US",{
-    minimumFractionDigits:2,
-    maximumFractionDigits:2
-  });
-}
+  const dateString =
+    today.getFullYear() +
+    "-" +
+    String(today.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(today.getDate()).padStart(2, "0");
 
+  document.getElementById("dateInput").value = dateString;
 
-function number(value){
-  if(value === null || value === undefined || isNaN(value)){
-    return "—";
-  }
+  renderHistory();
 
-  return Number(value).toLocaleString("en-US");
-}
+});
 
 
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
+/* =========================
+   工具函数
+========================= */
 
+function getSnapshots() {
 
-function getSnapshots(){
-  try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  }catch(e){
+  try {
+
+    const data = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "[]"
+    );
+
+    return Array.isArray(data) ? data : [];
+
+  } catch (error) {
+
     return [];
+
   }
+
 }
 
 
-function saveSnapshots(data){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+function saveSnapshots(data) {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
 }
 
 
-function getToday(){
-  const d = new Date();
+function normalizeName(name) {
 
-  const year = d.getFullYear();
-  const month = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
+  return String(name || "")
+    .trim()
+    .replace(/\s+/g, " ");
 
-  return `${year}-${month}-${day}`;
 }
 
 
-document.getElementById("dateInput").value = getToday();
+function parseMoney(value) {
+
+  if (value === undefined || value === null) {
+    return 0;
+  }
+
+  let text = String(value)
+    .trim()
+    .replace(/,/g, "")
+    .replace(/\s/g, "");
+
+  if (!text) {
+    return 0;
+  }
+
+  const negative = text.includes("-");
+
+  const match = text.match(
+    /[-+]?(?:\d+(?:\.\d+)?|\.\d+)/
+  );
+
+  if (!match) {
+    return 0;
+  }
+
+  let number = parseFloat(match[0]);
+
+  if (negative) {
+    number = -Math.abs(number);
+  }
+
+  return number;
+
+}
+
+
+function formatMoney(value) {
+
+  const number = Number(value) || 0;
+
+  return "HK$" + number.toLocaleString(
+    "en-US",
+    {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }
+  );
+
+}
+
+
+function formatNumber(value) {
+
+  return (Number(value) || 0).toLocaleString("en-US");
+
+}
+
+
+function escapeHtml(text) {
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
 
 
 /* =========================
    渠道分类
 ========================= */
 
-function classifyChannel(name){
+function classifyChannel(name) {
 
-  const n = String(name || "").trim().toLowerCase();
+  const raw = normalizeName(name);
+  const n = raw.toLowerCase();
 
-  if(
-    n.startsWith("meta-") ||
-    n.startsWith("meta_ads") ||
-    n.startsWith("meta-ads")
-  ){
-    return "Meta Ads";
-  }
+  /*
+   * Google Ads
+   *
+   * GG_Platxxx
+   * GG-Ads
+   * GG_ads
+   * Google Ads
+   * GoogleAds
+   */
 
-  if(
+  if (
+    n.startsWith("gg_plat") ||
     n.startsWith("gg-ads") ||
     n.startsWith("gg_ads") ||
+    n.startsWith("ggads") ||
     n.startsWith("google-ads") ||
-    n.startsWith("google_ads")
-  ){
+    n.startsWith("google_ads") ||
+    n.startsWith("google ads") ||
+    n.startsWith("googleads")
+  ) {
+
     return "Google Ads";
+
   }
 
-  if(n === "hoverair.com"){
+
+  /*
+   * Meta Ads
+   */
+
+  if (
+    n.startsWith("meta-") ||
+    n.startsWith("meta_") ||
+    n.startsWith("meta ads") ||
+    n.startsWith("metaads") ||
+    n === "meta"
+  ) {
+
+    return "Meta Ads";
+
+  }
+
+
+  /*
+   * hoverair.com
+   */
+
+  if (n === "hoverair.com") {
+
     return "hoverair.com";
+
   }
 
-  if(
+
+  /*
+   * IGG Newsletter
+   */
+
+  if (
     n.startsWith("igg_") ||
+    n.startsWith("igg-") ||
+    n.startsWith("igg ") ||
     n.includes("igg newsletter") ||
-    n.includes("igg-dedicated")
-  ){
+    n.includes("igg-dedicated") ||
+    n.includes("igg_dedicated")
+  ) {
+
     return "IGG Newsletter";
+
   }
 
-  if(
-    n.startsWith("edm-") ||
-    n.startsWith("edm_") ||
-    n.includes("email")
-  ){
+
+  /*
+   * EDM
+   */
+
+  if (
+    n.startsWith("edm") ||
+    n.startsWith("email") ||
+    n.startsWith("newsletter")
+  ) {
+
     return "EDM";
+
   }
 
-  if(n.includes("backermany")){
+
+  /*
+   * BackerMany
+   */
+
+  if (
+    n.includes("backermany") ||
+    n.includes("backer-many")
+  ) {
+
     return "BackerMany";
+
   }
 
-  if(
-    n.includes("ifa") ||
-    n.includes("event")
-  ){
-    return "IFA / Event";
-  }
 
-  if(
-    n.includes("facebook") ||
-    n.includes("fb-") ||
-    n.includes("fb_")
-  ){
+  /*
+   * Facebook
+   */
+
+  if (
+    n.startsWith("facebook") ||
+    n.startsWith("fb_") ||
+    n.startsWith("fb-")
+  ) {
+
     return "Facebook";
+
   }
 
-  if(
-    n.includes("instagram") ||
-    n.includes("ig-") ||
-    n.includes("ig_")
-  ){
+
+  /*
+   * Instagram
+   */
+
+  if (
+    n.startsWith("instagram") ||
+    n.startsWith("ig_") ||
+    n.startsWith("ig-")
+  ) {
+
     return "Instagram";
+
   }
 
-  if(
-    n.includes("reddit")
-  ){
+
+  /*
+   * Reddit
+   */
+
+  if (
+    n.startsWith("reddit") ||
+    n.startsWith("rd_") ||
+    n.startsWith("rd-")
+  ) {
+
     return "Reddit";
+
   }
 
-  if(
-    n.includes("pr-") ||
-    n.includes("pr_") ||
-    n.includes("press")
-  ){
-    return "PR";
-  }
 
-  if(
-    n.includes("x-") ||
+  /*
+   * X / Twitter
+   */
+
+  if (
+    n.startsWith("twitter") ||
     n.startsWith("x_") ||
-    n.includes("twitter")
-  ){
+    n.startsWith("x-")
+  ) {
+
     return "X / Twitter";
+
   }
+
+
+  /*
+   * IFA / Event
+   */
+
+  if (
+    n.includes("ifa") ||
+    n.includes("event") ||
+    n.includes("expo")
+  ) {
+
+    return "IFA / Event";
+
+  }
+
+
+  /*
+   * PR
+   */
+
+  if (
+    n.startsWith("pr_") ||
+    n.startsWith("pr-") ||
+    n.startsWith("press") ||
+    n.includes("media")
+  ) {
+
+    return "PR";
+
+  }
+
+
+  /*
+   * 其他
+   */
 
   return "Other";
+
 }
 
 
 /* =========================
-   数字解析
+   解析 IGG 数据
 ========================= */
 
-function parseMoney(value){
+function parseSequentialText(text) {
 
-  if(value === null || value === undefined){
-    return 0;
-  }
-
-  let s = String(value)
-    .replace(/,/g,"")
-    .replace(/HK\$/gi,"")
-    .replace(/US\$/gi,"")
-    .replace(/SG\$/gi,"")
-    .replace(/A\$/gi,"")
-    .replace(/C\$/gi,"")
-    .replace(/￥/g,"")
-    .replace(/¥/g,"")
-    .replace(/€/g,"")
-    .replace(/£/g,"")
-    .replace(/₩/g,"")
-    .trim();
-
-  if(!s || s === "-"){
-    return 0;
-  }
-
-  const negative = s.startsWith("-");
-
-  s = s.replace(/[^\d.]/g,"");
-
-  const num = parseFloat(s);
-
-  if(isNaN(num)){
-    return 0;
-  }
-
-  return negative ? -num : num;
-}
-
-
-/* =========================
-   IGG 原始数据解析
-========================= */
-
-function parseSequentialText(text){
-
-  const lines = text
+  const lines = String(text || "")
     .split(/\r?\n/)
     .map(x => x.trim())
     .filter(x => x !== "");
 
   const records = [];
 
+  /*
+   * IGG 实际结构：
+
+   Referral Name
+   active
+   New orders
+   1 day
+   7 days
+   Income
+   Total
+   Copy link
+   Deactivate
+
+   然后进入下一个 Referral
+  */
+
   let i = 0;
 
-  while(i < lines.length){
+  while (i < lines.length) {
 
     /*
-      典型结构：
+     * 跳过明显的按钮文本
+     */
 
-      Referral Name
-      active
-      1
-      HK$7,739.00
-      HK$7,739.00
-      HK$7,739.00
-      HK$7,739.00
-      Copy linkDeactivate
-    */
+    if (
+      /^(copy link|deactivate|activate|edit|delete)$/i.test(lines[i])
+    ) {
 
-    const name = lines[i];
-
-    if(
-      !name ||
-      name === "Referral Name" ||
-      name === "Status"
-    ){
       i++;
       continue;
+
     }
 
-    const statusIndex = i + 1;
+    /*
+     * 找到一个可能的 Referral Name
+     */
 
-    if(statusIndex >= lines.length){
+    const name = normalizeName(lines[i]);
+
+    if (!name) {
+
+      i++;
+      continue;
+
+    }
+
+    /*
+     * 后面至少需要有：
+     * status
+     * orders
+     * day1
+     * day7
+     * income
+     * total
+     */
+
+    if (i + 6 >= lines.length) {
       break;
     }
 
-    const status = lines[statusIndex];
+    const status = lines[i + 1];
 
-    if(
-      status !== "active" &&
-      status !== "inactive" &&
-      status !== "deactivated"
-    ){
+    const ordersText = lines[i + 2];
+
+    const day1Text = lines[i + 3];
+
+    const day7Text = lines[i + 4];
+
+    const incomeText = lines[i + 5];
+
+    const totalText = lines[i + 6];
+
+    /*
+     * 判断结构是否合理
+     */
+
+    const validOrders =
+      /^-?\d+(?:\.\d+)?$/.test(
+        ordersText.replace(/,/g, "")
+      );
+
+    const moneyFields = [
+      day1Text,
+      day7Text,
+      incomeText,
+      totalText
+    ];
+
+    const validMoney =
+      moneyFields.every(value =>
+        /(?:HK\$|US\$|SG\$|A\$|C\$|\$|￥|¥|€|£|₩)?\s*-?\s*\d/.test(value)
+      );
+
+    if (
+      !validOrders ||
+      !validMoney
+    ) {
+
       i++;
       continue;
+
     }
 
-    const orders = parseInt(lines[i+2] || "0",10) || 0;
-
-    const day1 = parseMoney(lines[i+3]);
-    const day7 = parseMoney(lines[i+4]);
-    const income = parseMoney(lines[i+5]);
-    const total = parseMoney(lines[i+6]);
-
     records.push({
-      name:name,
-      status:status,
-      orders:orders,
-      day1:day1,
-      day7:day7,
-      income:income,
-      total:total
+
+      name,
+
+      status,
+
+      orders: parseFloat(
+        ordersText.replace(/,/g, "")
+      ) || 0,
+
+      day1: parseMoney(day1Text),
+
+      day7: parseMoney(day7Text),
+
+      income: parseMoney(incomeText),
+
+      total: parseMoney(totalText),
+
+      channel: classifyChannel(name),
+
+      dailyOrders: 0,
+
+      dailyRevenue: 0
+
     });
 
-    i += 8;
+    /*
+     * 跳过当前 Referral 的 7 个核心字段
+     */
+
+    i += 7;
+
+    /*
+     * 如果接下来是按钮文本，则继续跳过
+     */
+
+    while (
+      i < lines.length &&
+      /^(copy link|deactivate|activate|edit|delete)$/i.test(lines[i])
+    ) {
+
+      i++;
+
+    }
+
   }
 
   return records;
+
 }
 
 
 /* =========================
-   找前一个快照
+   获取上一条快照
 ========================= */
 
-function getPreviousSnapshot(project,date){
+function getPreviousSnapshot(
+  project,
+  date
+) {
 
   const snapshots = getSnapshots();
 
-  const candidates = snapshots
-    .filter(s =>
-      s.project === project &&
-      s.date < date
+  const previous = snapshots
+    .filter(item =>
+      item.project === project &&
+      item.date < date
     )
-    .sort((a,b) => a.date.localeCompare(b.date));
+    .sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
 
-  if(candidates.length === 0){
+  if (!previous.length) {
+
     return null;
+
   }
 
-  return candidates[candidates.length - 1];
+  return previous[previous.length - 1];
+
 }
 
 
@@ -1022,226 +1367,399 @@ function getPreviousSnapshot(project,date){
    计算每日增量
 ========================= */
 
-function calculateDailyData(records,previous){
+function calculateDailyChanges(
+  records,
+  previousSnapshot
+) {
+
+  if (!previousSnapshot) {
+
+    return records.map(record => ({
+
+      ...record,
+
+      channel: classifyChannel(record.name),
+
+      dailyOrders: record.orders,
+
+      dailyRevenue: record.total
+
+    }));
+
+  }
+
 
   const previousMap = {};
 
-  if(previous && previous.records){
+  previousSnapshot.records.forEach(record => {
 
-    previous.records.forEach(r => {
-      previousMap[r.name] = r;
-    });
-
-  }
-
-  return records.map(r => {
-
-    const old = previousMap[r.name];
-
-    let dailyOrders = null;
-    let dailyRevenue = null;
-
-    if(old){
-
-      dailyOrders = Math.max(
-        0,
-        r.orders - Number(old.orders || 0)
-      );
-
-      dailyRevenue = Math.max(
-        0,
-        r.total - Number(old.total || 0)
-      );
-
-    }else{
-
-      /*
-        新出现的 Referral：
-        如果存在历史快照，则把当前累计值
-        视为新增。
-      */
-
-      if(previous){
-
-        dailyOrders = r.orders;
-        dailyRevenue = r.total;
-
-      }
-
-    }
-
-    return {
-      ...r,
-      channel:classifyChannel(r.name),
-      dailyOrders:dailyOrders,
-      dailyRevenue:dailyRevenue
-    };
+    previousMap[
+      normalizeName(record.name)
+    ] = record;
 
   });
-}
 
 
-/* =========================
-   导入数据
-========================= */
+  return records.map(record => {
 
-function importData(){
+    const key =
+      normalizeName(record.name);
 
-  const project =
-    document.getElementById("projectInput").value.trim();
+    const previous =
+      previousMap[key];
 
-  const date =
-    document.getElementById("dateInput").value;
-
-  const text =
-    document.getElementById("dataInput").value.trim();
-
-  if(!project){
-    showMessage("请先填写项目名称。",true);
-    return;
-  }
-
-  if(!date){
-    showMessage("请选择日期。",true);
-    return;
-  }
-
-  if(!text){
-    showMessage("请先粘贴 IGG Referral 数据。",true);
-    return;
-  }
-
-  const records = parseSequentialText(text);
-
-  if(records.length === 0){
-
-    showMessage(
-      "没有识别到 Referral 数据，请确认复制的是 IGG Referral Links 页面内容。",
-      true
-    );
-
-    return;
-  }
-
-  const previous = getPreviousSnapshot(project,date);
-
-  const calculated =
-    calculateDailyData(records,previous);
-
-  const snapshot = {
-    project:project,
-    date:date,
-    savedAt:new Date().toISOString(),
-    records:calculated
-  };
-
-  const snapshots = getSnapshots();
-
-  /*
-    同项目 + 同日期：
-    覆盖原来的快照
-  */
-
-  const index = snapshots.findIndex(s =>
-    s.project === project &&
-    s.date === date
-  );
-
-  if(index >= 0){
-
-    snapshots[index] = snapshot;
-
-  }else{
-
-    snapshots.push(snapshot);
-
-  }
-
-  snapshots.sort((a,b) =>
-    a.date.localeCompare(b.date)
-  );
-
-  saveSnapshots(snapshots);
-
-  currentSnapshot = snapshot;
-
-  renderAll();
-
-  showMessage(
-    `成功导入 ${records.length} 个 Referral，日期：${date}`,
-    false
-  );
-}
-
-
-/* =========================
-   当前快照
-========================= */
-
-function getLatestSnapshot(){
-
-  const snapshots = getSnapshots();
-
-  if(snapshots.length === 0){
-    return null;
-  }
-
-  return snapshots[snapshots.length - 1];
-}
-
-
-/* =========================
-   渠道聚合
-========================= */
-
-function aggregateChannels(snapshot){
-
-  const map = {};
-
-  snapshot.records.forEach(r => {
 
     /*
-      每次渲染时重新分类，
-      防止旧数据保存过 DTC 后一直沿用旧分类。
-    */
+     * 新出现的 Referral
+     */
 
-    const channel = classifyChannel(r.name);
+    if (!previous) {
 
-    if(!map[channel]){
+      return {
 
-      map[channel] = {
-        channel:channel,
-        referrals:0,
-        orders:0,
-        revenue:0,
-        dailyOrders:0,
-        dailyRevenue:0,
-        records:[]
+        ...record,
+
+        channel: classifyChannel(record.name),
+
+        dailyOrders: Math.max(
+          0,
+          record.orders
+        ),
+
+        dailyRevenue: Math.max(
+          0,
+          record.total
+        )
+
       };
 
     }
 
-    map[channel].referrals++;
 
-    map[channel].orders += Number(r.orders || 0);
+    const dailyOrders =
+      record.orders - (
+        Number(previous.orders) || 0
+      );
 
-    map[channel].revenue += Number(r.total || 0);
+
+    const dailyRevenue =
+      record.total - (
+        Number(previous.total) || 0
+      );
+
+
+    return {
+
+      ...record,
+
+      channel: classifyChannel(record.name),
+
+      dailyOrders:
+        Math.max(0, dailyOrders),
+
+      dailyRevenue:
+        Math.max(0, dailyRevenue)
+
+    };
+
+  });
+
+}
+
+
+/* =========================
+   导入
+========================= */
+
+function importData() {
+
+  const project =
+    document.getElementById("projectInput")
+      .value
+      .trim();
+
+  const date =
+    document.getElementById("dateInput")
+      .value;
+
+  const rawData =
+    document.getElementById("dataInput")
+      .value;
+
+
+  if (!project) {
+
+    alert("请输入项目名称");
+
+    return;
+
+  }
+
+
+  if (!date) {
+
+    alert("请选择数据日期");
+
+    return;
+
+  }
+
+
+  if (!rawData.trim()) {
+
+    alert("请粘贴 IGG Referral 数据");
+
+    return;
+
+  }
+
+
+  const records =
+    parseSequentialText(rawData);
+
+
+  if (!records.length) {
+
+    alert(
+      "没有识别到有效 Referral 数据。\n\n请确认你复制的是 IGG Referral Links 页面中的完整数据。"
+    );
+
+    return;
+
+  }
+
+
+  const previousSnapshot =
+    getPreviousSnapshot(
+      project,
+      date
+    );
+
+
+  const finalRecords =
+    calculateDailyChanges(
+      records,
+      previousSnapshot
+    );
+
+
+  const snapshot = {
+
+    project,
+
+    date,
+
+    savedAt:
+      new Date().toISOString(),
+
+    records: finalRecords
+
+  };
+
+
+  let snapshots =
+    getSnapshots();
+
+
+  /*
+   * 同一个项目 + 同一天
+   * 重新上传时直接覆盖
+   */
+
+  snapshots =
+    snapshots.filter(item =>
+      !(
+        item.project === project &&
+        item.date === date
+      )
+    );
+
+
+  snapshots.push(snapshot);
+
+
+  snapshots.sort((a, b) => {
+
+    if (a.project !== b.project) {
+
+      return a.project.localeCompare(
+        b.project
+      );
+
+    }
+
+    return a.date.localeCompare(
+      b.date
+    );
+
+  });
+
+
+  saveSnapshots(snapshots);
+
+
+  currentProject = project;
+
+  currentDate = date;
+
+  currentRecords = finalRecords;
+
+
+  renderAll();
+
+
+  alert(
+    `数据导入成功！\n\n识别到 ${finalRecords.length} 个 Referral。`
+  );
+
+}
+
+
+/* =========================
+   获取当前项目最新快照
+========================= */
+
+function getLatestSnapshot(project) {
+
+  const snapshots =
+    getSnapshots()
+      .filter(item =>
+        item.project === project
+      )
+      .sort((a, b) =>
+        a.date.localeCompare(b.date)
+      );
+
+  if (!snapshots.length) {
+
+    return null;
+
+  }
+
+  return snapshots[snapshots.length - 1];
+
+}
+
+
+/* =========================
+   获取当前数据
+========================= */
+
+function getCurrentData() {
+
+  if (
+    currentRecords.length &&
+    currentProject
+  ) {
+
+    return {
+
+      project: currentProject,
+
+      date: currentDate,
+
+      records: currentRecords
+
+    };
+
+  }
+
+
+  const project =
+    document.getElementById("projectInput")
+      .value
+      .trim();
+
+
+  const latest =
+    getLatestSnapshot(project);
+
+
+  if (!latest) {
+
+    return null;
+
+  }
+
+
+  return latest;
+
+}
+
+
+/* =========================
+   渠道汇总
+========================= */
+
+function aggregateChannels(records) {
+
+  const map = {};
+
+
+  records.forEach(record => {
+
+    /*
+     * 永远重新分类
+     * 不使用旧 snapshot 里面可能过期的 channel
+     */
+
+    const channel =
+      classifyChannel(record.name);
+
+
+    if (!map[channel]) {
+
+      map[channel] = {
+
+        channel,
+
+        referralCount: 0,
+
+        orders: 0,
+
+        revenue: 0,
+
+        dailyOrders: 0,
+
+        dailyRevenue: 0,
+
+        records: []
+
+      };
+
+    }
+
+
+    map[channel].referralCount++;
+
+    map[channel].orders +=
+      Number(record.orders) || 0;
+
+    map[channel].revenue +=
+      Number(record.total) || 0;
 
     map[channel].dailyOrders +=
-      Number(r.dailyOrders || 0);
+      Number(record.dailyOrders) || 0;
 
     map[channel].dailyRevenue +=
-      Number(r.dailyRevenue || 0);
+      Number(record.dailyRevenue) || 0;
 
     map[channel].records.push({
-      ...r,
-      channel:channel
+
+      ...record,
+
+      channel
+
     });
 
   });
 
+
   return Object.values(map)
-    .sort((a,b) => b.revenue - a.revenue);
+    .sort((a, b) =>
+      b.revenue - a.revenue
+    );
+
 }
 
 
@@ -1249,1605 +1767,1475 @@ function aggregateChannels(snapshot){
    KPI
 ========================= */
 
-function renderKPI(){
-
-  const snapshot = getLatestSnapshot();
-
-  if(!snapshot){
-    return;
-  }
-
-  const records = snapshot.records;
+function renderKPI(records, date) {
 
   const totalRevenue =
     records.reduce(
-      (sum,r) => sum + Number(r.total || 0),
+      (sum, r) =>
+        sum + (Number(r.total) || 0),
       0
     );
 
-  const totalOrders =
-    records.reduce(
-      (sum,r) => sum + Number(r.orders || 0),
-      0
-    );
 
   const todayRevenue =
     records.reduce(
-      (sum,r) => sum + Number(r.dailyRevenue || 0),
+      (sum, r) =>
+        sum + (Number(r.dailyRevenue) || 0),
       0
     );
+
+
+  const totalOrders =
+    records.reduce(
+      (sum, r) =>
+        sum + (Number(r.orders) || 0),
+      0
+    );
+
 
   const todayOrders =
     records.reduce(
-      (sum,r) => sum + Number(r.dailyOrders || 0),
+      (sum, r) =>
+        sum + (Number(r.dailyOrders) || 0),
       0
     );
 
-  document.getElementById("kpiRevenue").textContent =
-    money(totalRevenue);
 
-  document.getElementById("kpiTodayRevenue").textContent =
-    money(todayRevenue);
-
-  document.getElementById("kpiOrders").textContent =
-    number(totalOrders);
-
-  document.getElementById("kpiTodayOrders").textContent =
-    number(todayOrders);
+  document.getElementById(
+    "kpiTotalRevenue"
+  ).textContent =
+    formatMoney(totalRevenue);
 
 
-  const previous =
-    getPreviousSnapshot(
-      snapshot.project,
-      snapshot.date
-    );
-
-  if(!previous){
-
-    document.getElementById("kpiRevenueChange")
-      .textContent = "首次记录";
-
-    document.getElementById("kpiOrdersChange")
-      .textContent = "首次记录";
-
-    return;
-  }
-
-  const previousRevenue =
-    previous.records.reduce(
-      (sum,r) => sum + Number(r.dailyRevenue || 0),
-      0
-    );
-
-  const previousOrders =
-    previous.records.reduce(
-      (sum,r) => sum + Number(r.dailyOrders || 0),
-      0
-    );
-
-  document.getElementById("kpiRevenueChange")
-    .innerHTML = formatChange(
-      todayRevenue,
-      previousRevenue
-    );
-
-  document.getElementById("kpiOrdersChange")
-    .innerHTML = formatChange(
-      todayOrders,
-      previousOrders
-    );
-}
+  document.getElementById(
+    "kpiTodayRevenue"
+  ).textContent =
+    formatMoney(todayRevenue);
 
 
-function formatChange(current,previous){
+  document.getElementById(
+    "kpiTotalOrders"
+  ).textContent =
+    formatNumber(totalOrders);
 
-  if(previous === 0){
 
-    if(current === 0){
-      return `<span class="neutral">较前一日持平</span>`;
-    }
+  document.getElementById(
+    "kpiTodayOrders"
+  ).textContent =
+    formatNumber(todayOrders);
 
-    return `<span class="positive">↑ 新增</span>`;
-  }
 
-  const pct =
-    ((current - previous) / previous) * 100;
+  document.getElementById(
+    "kpiRevenueSub"
+  ).textContent =
+    date
+      ? `${date} 新增`
+      : "等待数据";
 
-  if(pct > 0){
 
-    return `
-      <span class="positive">
-        ↑ ${pct.toFixed(1)}% vs 前一日
-      </span>
-    `;
+  document.getElementById(
+    "kpiOrdersSub"
+  ).textContent =
+    date
+      ? `${date} 新增`
+      : "等待数据";
 
-  }else if(pct < 0){
-
-    return `
-      <span class="negative">
-        ↓ ${Math.abs(pct).toFixed(1)}% vs 前一日
-      </span>
-    `;
-
-  }
-
-  return `<span class="neutral">→ 持平</span>`;
 }
 
 
 /* =========================
-   渠道表现
+   数据概览
 ========================= */
 
-function renderChannels(){
+function renderInsight(records) {
 
-  const container =
-    document.getElementById("channelContainer");
-
-  const snapshot = getLatestSnapshot();
-
-  if(!snapshot){
-
-    container.innerHTML =
-      `<div class="empty">暂无数据</div>`;
-
-    return;
-  }
-
-  const channels =
-    aggregateChannels(snapshot);
-
-  if(channels.length === 0){
-
-    container.innerHTML =
-      `<div class="empty">暂无渠道数据</div>`;
-
-    return;
-  }
-
-
-  let html = `
-    <div style="overflow-x:auto;">
-    <table class="channel-table">
-      <thead>
-        <tr>
-          <th>渠道</th>
-          <th>Referral 数</th>
-          <th>累计订单</th>
-          <th>累计销售额</th>
-          <th>今日新增订单</th>
-          <th>今日新增销售额</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-
-  channels.forEach((c,index) => {
-
-    const rowId = `channel_${index}`;
-
-    const validRecords =
-      c.records.filter(r =>
-        Number(r.orders || 0) > 0 ||
-        Number(r.total || 0) !== 0
-      );
-
-    html += `
-      <tr
-        class="channel-row"
-        onclick="toggleChannel('${rowId}')"
-      >
-
-        <td>
-          <div class="channel-name">
-            <span class="chevron" id="chevron_${rowId}">
-              ▶
-            </span>
-
-            ${escapeHtml(c.channel)}
-          </div>
-        </td>
-
-        <td>${number(c.referrals)}</td>
-
-        <td>${number(c.orders)}</td>
-
-        <td class="money">
-          ${money(c.revenue)}
-        </td>
-
-        <td class="positive">
-          ${c.dailyOrders > 0 ? "+" : ""}
-          ${number(c.dailyOrders)}
-        </td>
-
-        <td class="positive">
-          ${c.dailyRevenue > 0 ? "+" : ""}
-          ${money(c.dailyRevenue)}
-        </td>
-
-      </tr>
-
-      <tr
-        class="channel-detail"
-        id="${rowId}"
-      >
-
-        <td colspan="6">
-
-          <div class="detail-wrap">
-
-            ${
-              validRecords.length === 0
-              ?
-              `<div class="empty">
-                该渠道暂无有效出单 Referral
-              </div>`
-              :
-              buildReferralTable(validRecords)
-            }
-
-          </div>
-
-        </td>
-
-      </tr>
-    `;
-
-  });
-
-
-  html += `
-      </tbody>
-    </table>
-    </div>
-  `;
-
-  container.innerHTML = html;
-}
-
-
-function toggleChannel(id){
-
-  const row =
-    document.getElementById(id);
-
-  const chevron =
-    document.getElementById("chevron_" + id);
-
-  if(!row){
-    return;
-  }
-
-  if(row.classList.contains("open")){
-
-    row.classList.remove("open");
-
-    if(chevron){
-      chevron.textContent = "▶";
-    }
-
-  }else{
-
-    row.classList.add("open");
-
-    if(chevron){
-      chevron.textContent = "▼";
-    }
-
-  }
-}
-
-
-/* =========================
-   Referral 表格
-========================= */
-
-function buildReferralTable(records){
-
-  const sorted = [...records]
-    .sort((a,b) =>
-      Number(b.dailyRevenue || 0) -
-      Number(a.dailyRevenue || 0)
+  const box =
+    document.getElementById(
+      "insightBox"
     );
 
-  let html = `
-    <table class="detail-table">
 
-      <thead>
-        <tr>
-          <th>Referral</th>
-          <th>今日新增订单</th>
-          <th>今日新增销售额</th>
-          <th>累计订单</th>
-          <th>累计销售额</th>
-        </tr>
-      </thead>
+  if (!records.length) {
 
-      <tbody>
-  `;
-
-  sorted.forEach(r => {
-
-    html += `
-      <tr>
-
-        <td>
-          ${escapeHtml(r.name)}
-        </td>
-
-        <td>
-          ${
-            r.dailyOrders !== null
-            ?
-            (r.dailyOrders > 0 ? "+" : "") +
-            number(r.dailyOrders)
-            :
-            "—"
-          }
-        </td>
-
-        <td class="${
-          Number(r.dailyRevenue || 0) > 0
-          ? "positive"
-          : ""
-        }">
-
-          ${
-            r.dailyRevenue !== null
-            ?
-            (r.dailyRevenue > 0 ? "+" : "") +
-            money(r.dailyRevenue)
-            :
-            "—"
-          }
-
-        </td>
-
-        <td>
-          ${number(r.orders)}
-        </td>
-
-        <td>
-          ${money(r.total)}
-        </td>
-
-      </tr>
-    `;
-
-  });
-
-  html += `
-      </tbody>
-    </table>
-  `;
-
-  return html;
-}
-
-
-/* =========================
-   独立 Referral 明细
-========================= */
-
-function renderReferralDetails(){
-
-  const container =
-    document.getElementById("referralContainer");
-
-  const snapshot = getLatestSnapshot();
-
-  if(!snapshot){
-
-    container.innerHTML =
-      `<div class="empty">暂无数据</div>`;
+    box.textContent =
+      "暂无数据。";
 
     return;
-  }
 
-
-  /*
-    隐藏：
-    累计订单 = 0
-    且
-    累计销售额 = 0
-  */
-
-  const records =
-    snapshot.records
-      .map(r => ({
-        ...r,
-        channel:classifyChannel(r.name)
-      }))
-      .filter(r =>
-        Number(r.orders || 0) > 0 ||
-        Number(r.total || 0) !== 0
-      )
-      .sort((a,b) =>
-        Number(b.total || 0) -
-        Number(a.total || 0)
-      );
-
-
-  if(records.length === 0){
-
-    container.innerHTML =
-      `<div class="empty">暂无有效 Referral 数据</div>`;
-
-    return;
-  }
-
-
-  let html = `
-    <div style="overflow-x:auto;">
-
-      <table class="channel-table">
-
-        <thead>
-          <tr>
-            <th>Referral</th>
-            <th>渠道</th>
-            <th>今日新增订单</th>
-            <th>今日新增销售额</th>
-            <th>累计订单</th>
-            <th>累计销售额</th>
-          </tr>
-        </thead>
-
-        <tbody>
-  `;
-
-
-  records.forEach(r => {
-
-    html += `
-      <tr>
-
-        <td>
-          <strong>
-            ${escapeHtml(r.name)}
-          </strong>
-        </td>
-
-        <td>
-          ${escapeHtml(r.channel)}
-        </td>
-
-        <td>
-          ${
-            r.dailyOrders !== null
-            ?
-            (r.dailyOrders > 0 ? "+" : "") +
-            number(r.dailyOrders)
-            :
-            "—"
-          }
-        </td>
-
-        <td class="${
-          Number(r.dailyRevenue || 0) > 0
-          ? "positive"
-          : ""
-        }">
-
-          ${
-            r.dailyRevenue !== null
-            ?
-            (r.dailyRevenue > 0 ? "+" : "") +
-            money(r.dailyRevenue)
-            :
-            "—"
-          }
-
-        </td>
-
-        <td>
-          ${number(r.orders)}
-        </td>
-
-        <td>
-          ${money(r.total)}
-        </td>
-
-      </tr>
-    `;
-
-  });
-
-
-  html += `
-        </tbody>
-
-      </table>
-
-    </div>
-  `;
-
-  container.innerHTML = html;
-}
-
-
-/* =========================
-   自动分析
-========================= */
-
-function renderInsights(){
-
-  const snapshot = getLatestSnapshot();
-
-  const list =
-    document.getElementById("insightList");
-
-  if(!snapshot){
-
-    list.innerHTML =
-      `<div>导入数据后，这里会自动生成表现分析。</div>`;
-
-    return;
   }
 
 
   const channels =
-    aggregateChannels(snapshot);
-
-  if(channels.length === 0){
-
-    list.innerHTML =
-      `<div>暂无足够数据进行分析。</div>`;
-
-    return;
-  }
-
-
-  const totalRevenue =
-    channels.reduce(
-      (sum,c) => sum + c.revenue,
-      0
-    );
-
-  const totalTodayRevenue =
-    channels.reduce(
-      (sum,c) => sum + c.dailyRevenue,
-      0
-    );
-
-  const totalTodayOrders =
-    channels.reduce(
-      (sum,c) => sum + c.dailyOrders,
-      0
-    );
+    aggregateChannels(records);
 
 
   const topRevenue =
+    channels[0];
+
+
+  const todayTop =
     [...channels]
-      .sort((a,b) =>
-        b.revenue - a.revenue
+      .sort(
+        (a, b) =>
+          b.dailyRevenue -
+          a.dailyRevenue
       )[0];
 
 
-  const topToday =
-    [...channels]
-      .sort((a,b) =>
-        b.dailyRevenue - a.dailyRevenue
-      )[0];
-
-
-  const share =
-    totalRevenue > 0
-    ?
-    (topRevenue.revenue / totalRevenue) * 100
-    :
-    0;
-
-
-  const previous =
-    getPreviousSnapshot(
-      snapshot.project,
-      snapshot.date
+  const totalRevenue =
+    records.reduce(
+      (sum, r) =>
+        sum + (Number(r.total) || 0),
+      0
     );
 
 
-  let html = [];
-
-  html.push(`
-    <div>
-      当前累计销售额为
-      <strong>${money(totalRevenue)}</strong>，
-      今日新增
-      <strong>${money(totalTodayRevenue)}</strong>，
-      今日新增订单
-      <strong>${number(totalTodayOrders)}</strong>。
-    </div>
-  `);
+  const todayRevenue =
+    records.reduce(
+      (sum, r) =>
+        sum +
+        (Number(r.dailyRevenue) || 0),
+      0
+    );
 
 
-  html.push(`
-    <div>
-      当前累计销售额最高的渠道为
-      <strong>${escapeHtml(topRevenue.channel)}</strong>，
-      累计贡献占比约
-      <strong>${share.toFixed(1)}%</strong>。
-    </div>
-  `);
+  let text =
+    `当前累计销售额 ${formatMoney(totalRevenue)}。`;
 
 
-  if(topToday && topToday.dailyRevenue > 0){
+  if (topRevenue) {
 
-    html.push(`
-      <div>
-        今日新增销售额最高的渠道为
-        <strong>${escapeHtml(topToday.channel)}</strong>，
-        新增
-        <strong>${money(topToday.dailyRevenue)}</strong>。
-      </div>
-    `);
+    text +=
+      ` 当前累计销售额最高的渠道为 ${topRevenue.channel}，贡献 ${formatMoney(topRevenue.revenue)}。`;
 
   }
 
 
-  if(previous){
+  if (
+    todayTop &&
+    todayTop.dailyRevenue > 0
+  ) {
 
-    const previousChannels =
-      aggregateChannels(previous);
-
-    const previousTodayRevenue =
-      previousChannels.reduce(
-        (sum,c) =>
-          sum + Number(c.dailyRevenue || 0),
-        0
-      );
-
-    if(previousTodayRevenue > 0){
-
-      const change =
-        (
-          (totalTodayRevenue - previousTodayRevenue)
-          /
-          previousTodayRevenue
-        ) * 100;
-
-      if(change > 0){
-
-        html.push(`
-          <div>
-            今日新增销售额较前一快照
-            <strong class="positive">
-              ↑ ${change.toFixed(1)}%
-            </strong>。
-          </div>
-        `);
-
-      }else if(change < 0){
-
-        html.push(`
-          <div>
-            今日新增销售额较前一快照
-            <strong class="negative">
-              ↓ ${Math.abs(change).toFixed(1)}%
-            </strong>。
-          </div>
-        `);
-
-      }else{
-
-        html.push(`
-          <div>
-            今日新增销售额与前一快照基本持平。
-          </div>
-        `);
-
-      }
-
-    }
-
-  }else{
-
-    html.push(`
-      <div>
-        当前为首次快照，后续上传数据后将开始计算每日变化趋势。
-      </div>
-    `);
+    text +=
+      ` 今日新增销售额最高的渠道为 ${todayTop.channel}，新增 ${formatMoney(todayTop.dailyRevenue)}。`;
 
   }
 
 
-  list.innerHTML = html.join("");
+  if (todayRevenue === 0) {
+
+    text +=
+      " 今日暂未检测到新增销售额。";
+
+  }
+
+
+  box.textContent = text;
 
 }
 
 
 /* =========================
-   SVG 折线图
+   渠道表
 ========================= */
 
-function lineChart(data,title){
+function renderChannelTable(records) {
 
-  if(!data || data.length === 0){
-    return `<div class="empty">暂无历史数据</div>`;
+  const tbody =
+    document.getElementById(
+      "channelTableBody"
+    );
+
+
+  if (!records.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6">
+          <div class="empty">暂无数据</div>
+        </td>
+      </tr>
+    `;
+
+    return;
+
   }
 
 
-  const width = 760;
-  const height = 280;
-
-  const left = 55;
-  const right = 20;
-  const top = 20;
-  const bottom = 42;
-
-  const chartW = width-left-right;
-  const chartH = height-top-bottom;
+  const channels =
+    aggregateChannels(records);
 
 
-  const max =
+  let html = "";
+
+
+  channels.forEach(
+    (channel, index) => {
+
+      const detailId =
+        `channel-detail-${index}`;
+
+
+      html += `
+
+        <tr
+          class="channel-row"
+          onclick="toggleChannel(${index})"
+        >
+
+          <td class="channel-name">
+
+            <span
+              class="channel-arrow"
+              id="arrow-${index}"
+            >
+              ›
+            </span>
+
+            ${escapeHtml(
+              channel.channel
+            )}
+
+          </td>
+
+          <td>
+            ${formatNumber(
+              channel.referralCount
+            )}
+          </td>
+
+          <td>
+            ${formatNumber(
+              channel.orders
+            )}
+          </td>
+
+          <td>
+            ${formatMoney(
+              channel.revenue
+            )}
+          </td>
+
+          <td class="${
+            channel.dailyOrders > 0
+              ? "number-positive"
+              : ""
+          }">
+
+            ${
+              channel.dailyOrders > 0
+                ? "+" +
+                  formatNumber(
+                    channel.dailyOrders
+                  )
+                : "0"
+            }
+
+          </td>
+
+          <td class="${
+            channel.dailyRevenue > 0
+              ? "number-positive"
+              : ""
+          }">
+
+            ${
+              channel.dailyRevenue > 0
+                ? "+" +
+                  formatMoney(
+                    channel.dailyRevenue
+                  )
+                : formatMoney(0)
+            }
+
+          </td>
+
+        </tr>
+
+
+        <tr
+          class="detail-row"
+          id="${detailId}"
+        >
+
+          <td colspan="6">
+
+            <div class="detail-container">
+
+              <table class="detail-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>Referral</th>
+
+                    <th>今日新增订单</th>
+
+                    <th>今日新增销售额</th>
+
+                    <th>累计订单</th>
+
+                    <th>累计销售额</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  ${renderChannelDetails(
+                    channel.records
+                  )}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  tbody.innerHTML = html;
+
+}
+
+
+function renderChannelDetails(records) {
+
+  /*
+   * 这里也过滤掉：
+   * 累计订单 = 0
+   * 且累计销售额 = 0
+   */
+
+  const validRecords =
+    records
+      .filter(record =>
+        Number(record.orders) !== 0 ||
+        Number(record.total) !== 0
+      )
+      .sort(
+        (a, b) =>
+          b.total - a.total
+      );
+
+
+  if (!validRecords.length) {
+
+    return `
+      <tr>
+        <td colspan="5">
+          <div class="empty">
+            暂无有效 Referral
+          </div>
+        </td>
+      </tr>
+    `;
+
+  }
+
+
+  return validRecords
+    .map(record => `
+
+      <tr>
+
+        <td>
+          ${escapeHtml(
+            record.name
+          )}
+        </td>
+
+        <td class="${
+          record.dailyOrders > 0
+            ? "number-positive"
+            : ""
+        }">
+
+          ${
+            record.dailyOrders > 0
+              ? "+" +
+                formatNumber(
+                  record.dailyOrders
+                )
+              : "0"
+          }
+
+        </td>
+
+        <td class="${
+          record.dailyRevenue > 0
+            ? "number-positive"
+            : ""
+        }">
+
+          ${
+            record.dailyRevenue > 0
+              ? "+" +
+                formatMoney(
+                  record.dailyRevenue
+                )
+              : formatMoney(0)
+          }
+
+        </td>
+
+        <td>
+          ${formatNumber(
+            record.orders
+          )}
+        </td>
+
+        <td>
+          ${formatMoney(
+            record.total
+          )}
+        </td>
+
+      </tr>
+
+    `)
+    .join("");
+
+}
+
+
+function toggleChannel(index) {
+
+  const row =
+    document.getElementById(
+      `channel-detail-${index}`
+    );
+
+
+  const arrow =
+    document.getElementById(
+      `arrow-${index}`
+    );
+
+
+  if (!row) return;
+
+
+  const open =
+    row.classList.contains("open");
+
+
+  row.classList.toggle(
+    "open",
+    !open
+  );
+
+
+  arrow.textContent =
+    open ? "›" : "⌄";
+
+}
+
+
+/* =========================
+   简单折线图
+========================= */
+
+function renderLineChart(
+  containerId,
+  data,
+  valueKey,
+  money
+) {
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+
+  if (!data.length) {
+
+    container.innerHTML =
+      `<div class="empty">暂无历史数据</div>`;
+
+    return;
+
+  }
+
+
+  const width = 900;
+
+  const height = 250;
+
+  const padding = 35;
+
+
+  const maxValue =
     Math.max(
-      1,
-      ...data.map(d => Number(d.value || 0))
+      ...data.map(
+        item =>
+          Number(item[valueKey]) || 0
+      ),
+      1
     );
 
 
   const points =
-    data.map((d,i) => {
+    data.map(
+      (item, index) => {
 
-      const x =
-        left +
-        (
-          data.length === 1
-          ? chartW/2
-          : i/(data.length-1)*chartW
-        );
-
-      const y =
-        top +
-        chartH -
-        (
-          Number(d.value || 0) / max
-        ) * chartH;
-
-      return {
-        x:x,
-        y:y,
-        value:Number(d.value || 0),
-        date:d.date
-      };
-
-    });
+        const x =
+          padding +
+          (
+            index /
+            Math.max(
+              data.length - 1,
+              1
+            )
+          ) *
+          (
+            width -
+            padding * 2
+          );
 
 
-  const path =
+        const value =
+          Number(
+            item[valueKey]
+          ) || 0;
+
+
+        const y =
+          height -
+          padding -
+          (
+            value /
+            maxValue
+          ) *
+          (
+            height -
+            padding * 2
+          );
+
+
+        return {
+          x,
+          y,
+          value
+        };
+
+      }
+    );
+
+
+  const linePath =
     points
-      .map((p,i) =>
-        `${i===0?"M":"L"} ${p.x} ${p.y}`
+      .map(
+        (point, index) =>
+          `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`
       )
       .join(" ");
 
 
-  let html = `
-    <svg viewBox="0 0 ${width} ${height}">
-
-      <line
-        x1="${left}"
-        y1="${top+chartH}"
-        x2="${width-right}"
-        y2="${top+chartH}"
-        stroke="#dfe4ec"
-      />
-
-      <line
-        x1="${left}"
-        y1="${top}"
-        x2="${left}"
-        y2="${top+chartH}"
-        stroke="#dfe4ec"
-      >
-
-      </line>
-
-      <text
-        x="${left-8}"
-        y="${top+5}"
-        text-anchor="end"
-        font-size="10"
-        fill="#8b94a5"
-      >
-        ${formatAxis(max)}
-      </text>
-
-      <text
-        x="${left-8}"
-        y="${top+chartH+4}"
-        text-anchor="end"
-        font-size="10"
-        fill="#8b94a5"
-      >
-        0
-      </text>
-
-      <path
-        d="${path}"
-        fill="none"
-        stroke="#4f6ef7"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-  `;
+  const areaPath =
+    linePath +
+    ` L ${points[points.length - 1].x} ${height - padding}` +
+    ` L ${points[0].x} ${height - padding} Z`;
 
 
-  points.forEach((p,i) => {
-
-    html += `
-      <circle
-        cx="${p.x}"
-        cy="${p.y}"
-        r="4"
-        fill="#ffffff"
-        stroke="#4f6ef7"
-        stroke-width="2"
-      />
-
-      <text
-        x="${p.x}"
-        y="${height-16}"
-        text-anchor="middle"
-        font-size="10"
-        fill="#8b94a5"
-      >
-        ${escapeHtml(p.date.slice(5))}
-      </text>
-    `;
-
-  });
-
-
-  html += `</svg>`;
-
-  return html;
-}
-
-
-function formatAxis(value){
-
-  if(value >= 1000000){
-    return (value/1000000).toFixed(1) + "M";
-  }
-
-  if(value >= 1000){
-    return (value/1000).toFixed(1) + "K";
-  }
-
-  return Math.round(value);
-}
-
-
-/* =========================
-   渠道堆叠柱状图
-========================= */
-
-function stackedBarChart(data,metric){
-
-  if(!data.dates.length){
-    return `<div class="empty">暂无历史数据</div>`;
-  }
-
-
-  const width = 760;
-  const height = 300;
-
-  const left = 48;
-  const right = 20;
-  const top = 20;
-  const bottom = 45;
-
-  const chartW = width-left-right;
-  const chartH = height-top-bottom;
-
-
-  const channelNames =
-    data.channels;
-
-
-  const max =
-    Math.max(
-      1,
-      ...data.dates.map(date => {
-
-        return channelNames.reduce(
-          (sum,ch) =>
-            sum +
-            Number(
-              data.values[ch]?.[date] || 0
-            ),
-          0
-        );
-
-      })
-    );
-
-
-  const barWidth =
-    Math.max(
-      10,
-      Math.min(
-        50,
-        chartW / data.dates.length * .55
+  const circles =
+    points
+      .map(
+        point => `
+          <circle
+            cx="${point.x}"
+            cy="${point.y}"
+            r="4"
+            fill="white"
+            stroke="#475569"
+            stroke-width="2"
+          />
+        `
       )
-    );
+      .join("");
 
 
-  let html = `
-    <svg viewBox="0 0 ${width} ${height}">
-  `;
+  const labels =
+    data
+      .map(
+        item =>
+          `<span>${escapeHtml(
+            item.date
+          )}</span>`
+      )
+      .join("");
 
 
-  data.dates.forEach((date,index) => {
+  container.innerHTML = `
 
-    const x =
-      left +
-      (
-        index + .5
-      ) /
-      data.dates.length *
-      chartW;
+    <div class="chart">
 
+      <div class="chart-content">
 
-    let currentY =
-      top + chartH;
-
-
-    channelNames.forEach((channel,channelIndex) => {
-
-      const value =
-        Number(
-          data.values[channel]?.[date] || 0
-        );
-
-      if(value <= 0){
-        return;
-      }
-
-
-      const h =
-        value / max * chartH;
-
-
-      currentY -= h;
-
-
-      const fill =
-        chartColor(channelIndex);
-
-
-      html += `
-        <rect
-          x="${x-barWidth/2}"
-          y="${currentY}"
-          width="${barWidth}"
-          height="${h}"
-          fill="${fill}"
-          rx="2"
+        <svg
+          class="svg-chart"
+          viewBox="0 0 ${width} ${height}"
+          preserveAspectRatio="none"
         >
-          <title>
-            ${escapeHtml(channel)}
-            ${date}
-            ${metric === "revenue" ? money(value) : number(value)}
-          </title>
-        </rect>
-      `;
 
-    });
+          <line
+            x1="${padding}"
+            y1="${padding}"
+            x2="${width - padding}"
+            y2="${padding}"
+            stroke="#edf0f4"
+            stroke-dasharray="4 4"
+          />
 
+          <line
+            x1="${padding}"
+            y1="${height / 2}"
+            x2="${width - padding}"
+            y2="${height / 2}"
+            stroke="#edf0f4"
+            stroke-dasharray="4 4"
+          />
 
-    html += `
-      <text
-        x="${x}"
-        y="${height-16}"
-        text-anchor="middle"
-        font-size="10"
-        fill="#8b94a5"
-      >
-        ${escapeHtml(date.slice(5))}
-      </text>
-    `;
+          <line
+            x1="${padding}"
+            y1="${height - padding}"
+            x2="${width - padding}"
+            y2="${height - padding}"
+            stroke="#edf0f4"
+          />
 
-  });
+          <path
+            d="${areaPath}"
+            fill="rgba(100,116,139,0.08)"
+          />
 
+          <path
+            d="${linePath}"
+            fill="none"
+            stroke="#475569"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
 
-  html += `
-    <line
-      x1="${left}"
-      y1="${top+chartH}"
-      x2="${width-right}"
-      y2="${top+chartH}"
-      stroke="#dfe4ec"
-    />
+          ${circles}
 
-    <line
-      x1="${left}"
-      y1="${top}"
-      x2="${left}"
-      y2="${top+chartH}"
-      stroke="#dfe4ec"
-    />
+        </svg>
 
-    <text
-      x="${left-7}"
-      y="${top+5}"
-      text-anchor="end"
-      font-size="10"
-      fill="#8b94a5"
-    >
-      ${formatAxis(max)}
-    </text>
+      </div>
 
-    <text
-      x="${left-7}"
-      y="${top+chartH+4}"
-      text-anchor="end"
-      font-size="10"
-      fill="#8b94a5"
-    >
-      0
-    </text>
+    </div>
 
-    </svg>
+    <div class="axis-labels">
+      ${labels}
+    </div>
+
   `;
 
-
-  return html;
-}
-
-
-function chartColor(index){
-
-  const colors = [
-    "#4f6ef7",
-    "#16a36a",
-    "#ef9b3e",
-    "#8b5cf6",
-    "#e05252",
-    "#14a8a8",
-    "#e36aaf",
-    "#6b7280",
-    "#2563eb",
-    "#84cc16",
-    "#f97316",
-    "#9333ea"
-  ];
-
-  return colors[index % colors.length];
 }
 
 
 /* =========================
-   构建历史趋势数据
+   获取每日整体数据
 ========================= */
 
-function getTrendData(){
+function getDailyOverallData(project) {
 
   const snapshots =
-    getSnapshots();
-
-  if(snapshots.length === 0){
-    return null;
-  }
-
-
-  /*
-    按项目取最新项目。
-  */
-
-  const latest =
-    getLatestSnapshot();
-
-  if(!latest){
-    return null;
-  }
-
-
-  const project =
-    latest.project;
-
-
-  const projectSnapshots =
-    snapshots
-      .filter(s => s.project === project)
-      .sort((a,b) =>
+    getSnapshots()
+      .filter(item =>
+        item.project === project
+      )
+      .sort((a, b) =>
         a.date.localeCompare(b.date)
       );
 
 
-  const dates =
-    projectSnapshots.map(s => s.date);
+  return snapshots.map(
+    snapshot => {
 
+      const records =
+        snapshot.records || [];
 
-  const overallRevenue =
-    projectSnapshots.map(s => {
 
       return {
-        date:s.date,
-        value:s.records.reduce(
-          (sum,r) =>
-            sum + Number(r.dailyRevenue || 0),
-          0
-        )
+
+        date: snapshot.date,
+
+        revenue:
+          records.reduce(
+            (sum, record) =>
+              sum +
+              (
+                Number(
+                  record.dailyRevenue
+                ) || 0
+              ),
+            0
+          ),
+
+        orders:
+          records.reduce(
+            (sum, record) =>
+              sum +
+              (
+                Number(
+                  record.dailyOrders
+                ) || 0
+              ),
+            0
+          )
+
       };
 
-    });
-
-
-  const overallOrders =
-    projectSnapshots.map(s => {
-
-      return {
-        date:s.date,
-        value:s.records.reduce(
-          (sum,r) =>
-            sum + Number(r.dailyOrders || 0),
-          0
-        )
-      };
-
-    });
-
-
-  const channelSet = new Set();
-
-  projectSnapshots.forEach(s => {
-
-    s.records.forEach(r => {
-
-      channelSet.add(
-        classifyChannel(r.name)
-      );
-
-    });
-
-  });
-
-
-  const channels =
-    Array.from(channelSet).sort();
-
-
-  const revenueValues = {};
-  const orderValues = {};
-
-
-  channels.forEach(channel => {
-
-    revenueValues[channel] = {};
-    orderValues[channel] = {};
-
-    projectSnapshots.forEach(s => {
-
-      const channelRecords =
-        s.records.filter(r =>
-          classifyChannel(r.name) === channel
-        );
-
-
-      revenueValues[channel][s.date] =
-        channelRecords.reduce(
-          (sum,r) =>
-            sum + Number(r.dailyRevenue || 0),
-          0
-        );
-
-
-      orderValues[channel][s.date] =
-        channelRecords.reduce(
-          (sum,r) =>
-            sum + Number(r.dailyOrders || 0),
-          0
-        );
-
-    });
-
-  });
-
-
-  return {
-    dates:dates,
-    overallRevenue:overallRevenue,
-    overallOrders:overallOrders,
-    channels:channels,
-    revenueValues:revenueValues,
-    orderValues:orderValues
-  };
-}
-
-
-/* =========================
-   趋势渲染
-========================= */
-
-function renderCharts(){
-
-  const data =
-    getTrendData();
-
-  if(!data){
-
-    document.getElementById("overallRevenueChart")
-      .innerHTML =
-      `<div class="empty">暂无历史数据</div>`;
-
-    document.getElementById("overallOrdersChart")
-      .innerHTML =
-      `<div class="empty">暂无历史数据</div>`;
-
-    return;
-  }
-
-
-  document.getElementById("overallRevenueChart")
-    .innerHTML =
-    lineChart(
-      data.overallRevenue,
-      "每日新增销售额"
-    );
-
-
-  document.getElementById("overallOrdersChart")
-    .innerHTML =
-    lineChart(
-      data.overallOrders,
-      "每日新增订单"
-    );
-
-
-  document.getElementById("channelRevenueChart")
-    .innerHTML =
-    stackedBarChart(
-      {
-        dates:data.dates,
-        channels:data.channels,
-        values:data.revenueValues
-      },
-      "revenue"
-    );
-
-
-  document.getElementById("channelOrdersChart")
-    .innerHTML =
-    stackedBarChart(
-      {
-        dates:data.dates,
-        channels:data.channels,
-        values:data.orderValues
-      },
-      "orders"
-    );
-
-
-  renderLegend(
-    "revenueLegend",
-    data.channels
+    }
   );
-
-  renderLegend(
-    "ordersLegend",
-    data.channels
-  );
-}
-
-
-function renderLegend(id,channels){
-
-  const el =
-    document.getElementById(id);
-
-  el.innerHTML =
-    channels.map((channel,index) => {
-
-      return `
-        <div class="legend-item">
-
-          <span
-            class="legend-dot"
-            style="background:${chartColor(index)}"
-          ></span>
-
-          ${escapeHtml(channel)}
-
-        </div>
-      `;
-
-    }).join("");
 
 }
 
 
 /* =========================
-   历史快照
+   渠道每日数据
 ========================= */
 
-function renderHistory(){
-
-  const container =
-    document.getElementById("historyContainer");
+function getChannelDailyData(project) {
 
   const snapshots =
     getSnapshots()
-      .sort((a,b) =>
-        b.date.localeCompare(a.date)
+      .filter(item =>
+        item.project === project
+      )
+      .sort((a, b) =>
+        a.date.localeCompare(b.date)
       );
 
 
-  if(snapshots.length === 0){
+  const allChannels =
+    new Set();
+
+
+  snapshots.forEach(
+    snapshot => {
+
+      snapshot.records.forEach(
+        record => {
+
+          allChannels.add(
+            classifyChannel(
+              record.name
+            )
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  const channels =
+    Array.from(allChannels);
+
+
+  const result =
+    snapshots.map(
+      snapshot => {
+
+        const values = {};
+
+
+        channels.forEach(
+          channel => {
+
+            values[channel] = {
+
+              revenue: 0,
+
+              orders: 0
+
+            };
+
+          }
+        );
+
+
+        snapshot.records.forEach(
+          record => {
+
+            const channel =
+              classifyChannel(
+                record.name
+              );
+
+
+            if (!values[channel]) {
+
+              values[channel] = {
+
+                revenue: 0,
+
+                orders: 0
+
+              };
+
+            }
+
+
+            values[channel].revenue +=
+              Number(
+                record.dailyRevenue
+              ) || 0;
+
+
+            values[channel].orders +=
+              Number(
+                record.dailyOrders
+              ) || 0;
+
+          }
+        );
+
+
+        return {
+
+          date: snapshot.date,
+
+          values
+
+        };
+
+      }
+    );
+
+
+  return {
+
+    channels,
+
+    data: result
+
+  };
+
+}
+
+
+/* =========================
+   渠道趋势柱状图
+========================= */
+
+function renderChannelBarChart(
+  containerId,
+  data,
+  channels,
+  metric
+) {
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+
+  if (!data.length) {
 
     container.innerHTML =
-      `<div class="empty">暂无历史快照</div>`;
+      `<div class="empty">暂无历史数据</div>`;
 
     return;
+
   }
 
 
+  /*
+   * 为了避免渠道过多导致页面太挤，
+   * 只显示最近 14 天
+   */
+
+  const displayData =
+    data.slice(-14);
+
+
+  const maxValue =
+    Math.max(
+
+      ...displayData.flatMap(
+        item =>
+          channels.map(
+            channel =>
+              Number(
+                item.values?.[channel]?.[metric]
+              ) || 0
+          )
+      ),
+
+      1
+
+    );
+
+
   let html = `
-    <div style="overflow-x:auto;">
 
-      <table class="history-table">
+    <div
+      style="
+        overflow-x:auto;
+        padding-bottom:8px;
+      "
+    >
 
-        <thead>
-          <tr>
-            <th>项目</th>
-            <th>日期</th>
-            <th>Referral 数</th>
-            <th>累计订单</th>
-            <th>累计销售额</th>
-            <th>今日新增订单</th>
-            <th>今日新增销售额</th>
-          </tr>
-        </thead>
+      <div
+        class="bar-chart"
+        style="
+          min-width:${Math.max(
+            650,
+            displayData.length * 65
+          )}px;
+        "
+      >
 
-        <tbody>
   `;
 
 
-  snapshots.forEach(s => {
+  displayData.forEach(
+    item => {
 
-    const orders =
-      s.records.reduce(
-        (sum,r) =>
-          sum + Number(r.orders || 0),
-        0
-      );
-
-    const revenue =
-      s.records.reduce(
-        (sum,r) =>
-          sum + Number(r.total || 0),
-        0
-      );
-
-    const dailyOrders =
-      s.records.reduce(
-        (sum,r) =>
-          sum + Number(r.dailyOrders || 0),
-        0
-      );
-
-    const dailyRevenue =
-      s.records.reduce(
-        (sum,r) =>
-          sum + Number(r.dailyRevenue || 0),
-        0
-      );
+      const total =
+        channels.reduce(
+          (sum, channel) =>
+            sum +
+            (
+              Number(
+                item.values?.[channel]?.[metric]
+              ) || 0
+            ),
+          0
+        );
 
 
-    html += `
-      <tr>
+      const height =
+        Math.max(
+          2,
+          (
+            total /
+            maxValue
+          ) *
+          100
+        );
 
-        <td>
-          ${escapeHtml(s.project)}
-        </td>
 
-        <td>
-          ${s.date}
-        </td>
+      html += `
 
-        <td>
-          ${number(s.records.length)}
-        </td>
+        <div class="bar-item">
 
-        <td>
-          ${number(orders)}
-        </td>
+          <div class="bar-value">
 
-        <td>
-          ${money(revenue)}
-        </td>
+            ${
+              metric === "revenue"
+                ? formatMoney(total)
+                : formatNumber(total)
+            }
 
-        <td>
-          ${number(dailyOrders)}
-        </td>
+          </div>
 
-        <td>
-          ${money(dailyRevenue)}
-        </td>
+          <div
+            class="bar"
+            style="
+              height:${height}%;
+            "
+          ></div>
 
-      </tr>
-    `;
+          <div class="bar-label">
+            ${escapeHtml(
+              item.date
+            )}
+          </div>
 
-  });
+        </div>
+
+      `;
+
+    }
+  );
 
 
   html += `
-        </tbody>
 
-      </table>
+      </div>
 
     </div>
+
   `;
 
 
   container.innerHTML = html;
+
 }
 
 
 /* =========================
-   清理
+   渠道 Legend
 ========================= */
 
-function clearInput(){
+function renderChannelLegend(
+  channels
+) {
 
-  document.getElementById("dataInput").value = "";
-
-  showMessage("输入框已清空。",false);
-}
-
-
-function clearHistory(){
-
-  const ok =
-    confirm(
-      "确定要删除所有历史快照吗？此操作不可恢复。"
+  const container =
+    document.getElementById(
+      "channelLegend"
     );
 
-  if(!ok){
+
+  if (!channels.length) {
+
+    container.innerHTML = "";
+
     return;
+
   }
 
-  localStorage.removeItem(STORAGE_KEY);
 
-  currentSnapshot = null;
+  container.innerHTML =
+    channels
+      .map(
+        channel => `
 
-  renderAll();
+          <div class="legend-item">
 
-  showMessage(
-    "历史数据已清除。",
-    false
-  );
-}
+            <span
+              class="legend-dot"
+              style="
+                background:#64748b;
+              "
+            ></span>
 
+            ${escapeHtml(
+              channel
+            )}
 
-function showMessage(text,error){
+          </div>
 
-  const el =
-    document.getElementById("message");
+        `
+      )
+      .join("");
 
-  el.textContent = text;
-
-  el.style.color =
-    error
-    ? "#e05252"
-    : "#16a36a";
-}
-
-
-/* =========================
-   示例数据
-========================= */
-
-function loadDemoData(){
-
-  document.getElementById("projectInput").value =
-    "Demo Project";
-
-  document.getElementById("dateInput").value =
-    getToday();
-
-  document.getElementById("dataInput").value =
-`igg_dedicated_260906
-active
-3
-HK$7,739.00
-HK$7,739.00
-HK$7,739.00
-HK$12,739.00
-Copy linkDeactivate
-
-igg_weeklytop_260902
-active
-5
-HK$9,000.00
-HK$9,000.00
-HK$9,000.00
-HK$19,000.00
-Copy linkDeactivate
-
-Meta_ads_US
-active
-2
-HK$4,000.00
-HK$4,000.00
-HK$4,000.00
-HK$8,000.00
-Copy linkDeactivate
-
-Meta_ads_UK
-active
-1
-HK$2,000.00
-HK$2,000.00
-HK$2,000.00
-HK$2,000.00
-Copy linkDeactivate
-
-GG-Ads-US
-active
-1
-HK$3,000.00
-HK$3,000.00
-HK$3,000.00
-HK$3,000.00
-Copy linkDeactivate
-
-hoverair.com
-active
-2
-HK$6,000.00
-HK$6,000.00
-HK$6,000.00
-HK$6,000.00
-Copy linkDeactivate
-
-BackerMany
-active
-1
-HK$6,389.00
-HK$6,389.00
-HK$6,389.00
-HK$6,389.00
-Copy linkDeactivate`;
-
-  showMessage(
-    "示例数据已填入输入框，可以直接点击「导入今日数据」。",
-    false
-  );
 }
 
 
 /* =========================
-   总渲染
+   Referral 明细
 ========================= */
 
-function renderAll(){
+function renderReferralTable(records) {
 
-  currentSnapshot =
-    getLatestSnapshot();
+  const tbody =
+    document.getElementById(
+      "referralTableBody"
+    );
 
-  renderKPI();
 
-  renderInsights();
+  const validRecords =
+    records
+      .filter(record =>
+        Number(record.orders) !== 0 ||
+        Number(record.total) !== 0
+      )
+      .map(record => ({
 
-  renderChannels();
+        ...record,
 
-  renderReferralDetails();
+        channel:
+          classifyChannel(
+            record.name
+          )
 
-  renderCharts();
+      }))
+      .sort(
+        (a, b) =>
+          b.total - a.total
+      );
+
+
+  if (!validRecords.length) {
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="6">
+
+          <div class="empty">
+            暂无有效 Referral
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML =
+    validRecords
+      .map(
+        record => `
+
+          <tr>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  record.name
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(
+                record.channel
+              )}
+            </td>
+
+            <td class="${
+              record.dailyOrders > 0
+                ? "number-positive"
+                : ""
+            }">
+
+              ${
+                record.dailyOrders > 0
+                  ? "+" +
+                    formatNumber(
+                      record.dailyOrders
+                    )
+                  : "0"
+              }
+
+            </td>
+
+            <td class="${
+              record.dailyRevenue > 0
+                ? "number-positive"
+                : ""
+            }">
+
+              ${
+                record.dailyRevenue > 0
+                  ? "+" +
+                    formatMoney(
+                      record.dailyRevenue
+                    )
+                  : formatMoney(0)
+              }
+
+            </td>
+
+            <td>
+              ${formatNumber(
+                record.orders
+              )}
+            </td>
+
+            <td>
+              ${formatMoney(
+                record.total
+              )}
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================
+   历史
+========================= */
+
+function renderHistory() {
+
+  const container =
+    document.getElementById(
+      "historyList"
+    );
+
+
+  const snapshots =
+    getSnapshots()
+      .sort((a, b) => {
+
+        if (
+          a.project !==
+          b.project
+        ) {
+
+          return b.project.localeCompare(
+            a.project
+          );
+
+        }
+
+        return b.date.localeCompare(
+          a.date
+        );
+
+      });
+
+
+  if (!snapshots.length) {
+
+    container.innerHTML =
+      `<div class="empty">暂无历史数据</div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    snapshots
+      .slice(0, 30)
+      .map(
+        snapshot => {
+
+          const records =
+            snapshot.records || [];
+
+
+          const revenue =
+            records.reduce(
+              (sum, r) =>
+                sum +
+                (
+                  Number(
+                    r.dailyRevenue
+                  ) || 0
+                ),
+              0
+            );
+
+
+          const orders =
+            records.reduce(
+              (sum, r) =>
+                sum +
+                (
+                  Number(
+                    r.dailyOrders
+                  ) || 0
+                ),
+              0
+            );
+
+
+          return `
+
+            <div class="history-item">
+
+              <div class="history-main">
+
+                <div>
+
+                  <div class="history-date">
+                    ${escapeHtml(
+                      snapshot.date
+                    )}
+                  </div>
+
+                  <div
+                    class="history-info"
+                  >
+                    ${escapeHtml(
+                      snapshot.project
+                    )}
+                  </div>
+
+                </div>
+
+                <div
+                  class="history-info"
+                >
+
+                  新增销售额：
+                  <strong>
+                    ${formatMoney(
+                      revenue
+                    )}
+                  </strong>
+
+                  &nbsp;&nbsp;
+
+                  新增订单：
+                  <strong>
+                    ${formatNumber(
+                      orders
+                    )}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================
+   全部渲染
+========================= */
+
+function renderAll() {
+
+  const data =
+    getCurrentData();
+
+
+  if (!data) {
+
+    renderHistory();
+
+    return;
+
+  }
+
+
+  const records =
+    data.records || [];
+
+
+  renderKPI(
+    records,
+    data.date
+  );
+
+
+  renderInsight(
+    records
+  );
+
+
+  renderChannelTable(
+    records
+  );
+
+
+  renderReferralTable(
+    records
+  );
+
+
+  const overall =
+    getDailyOverallData(
+      data.project
+    );
+
+
+  renderLineChart(
+    "revenueTrend",
+    overall,
+    "revenue",
+    true
+  );
+
+
+  renderLineChart(
+    "ordersTrend",
+    overall,
+    "orders",
+    false
+  );
+
+
+  const channelData =
+    getChannelDailyData(
+      data.project
+    );
+
+
+  renderChannelLegend(
+    channelData.channels
+  );
+
+
+  renderChannelBarChart(
+    "channelRevenueTrend",
+    channelData.data,
+    channelData.channels,
+    "revenue"
+  );
+
+
+  renderChannelBarChart(
+    "channelOrdersTrend",
+    channelData.data,
+    channelData.channels,
+    "orders"
+  );
+
 
   renderHistory();
+
 }
 
 
 /* =========================
-   页面启动
+   清空历史
 ========================= */
 
-renderAll();
+function clearHistory() {
+
+  const confirmed =
+    confirm(
+      "确定要清空所有历史快照吗？\n\n清空后将无法计算过去的每日增量。"
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    STORAGE_KEY
+  );
+
+
+  currentRecords = [];
+
+  currentProject = "";
+
+  currentDate = "";
+
+
+  location.reload();
+
+}
 
 </script>
 
