@@ -363,7 +363,48 @@
         padding: 16px;
       }
     }
-  </style>
+  
+    .channel-referral-dropdown summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 180px;
+    }
+    .channel-referral-dropdown summary::-webkit-details-marker {
+      display: none;
+    }
+    .channel-referral-dropdown summary::before {
+      content: "▶";
+      font-size: 10px;
+      opacity: .65;
+      margin-right: 6px;
+    }
+    .channel-referral-dropdown[open] summary::before {
+      content: "▼";
+    }
+    .channel-referral-count {
+      font-size: 12px;
+      color: #888;
+      white-space: nowrap;
+    }
+    .channel-referral-list {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.04);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .channel-referral-item {
+      padding: 4px 0;
+      font-size: 12px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+</style>
 </head>
 
 <body>
@@ -691,43 +732,14 @@ HK$2,000.00"
     </div>
 
     <div class="section-desc">
-      销售额为 0 的 Referral 不显示；今日实际新增销售和订单只显示正向新增
+      销售额为 0 的 Referral 不显示；按每天累计数据计算实际新增销售和订单，与“渠道每日新增”保持一致
     </div>
 
     <div class="table-wrap">
 
-      <table>
+      <table class="daily-referral-table">
 
-        <thead>
-
-          <tr>
-
-            <th>
-              Referral
-            </th>
-
-            <th>
-              渠道
-            </th>
-
-            <th class="number">
-              累计订单
-            </th>
-
-            <th class="number">
-              累计销售额
-            </th>
-
-            <th class="number">
-              今日新增订单
-            </th>
-
-            <th class="number">
-              今日新增销售额
-            </th>
-
-          </tr>
-
+        <thead id="referralDailyHead">
         </thead>
 
         <tbody id="referralBody">
@@ -738,7 +750,6 @@ HK$2,000.00"
     </div>
 
   </div>
-
 
   <!-- 历史 -->
   <div class="card">
@@ -2214,12 +2225,27 @@ function renderDailyChannelTable(snapshots) {
     let bodyHtml = "";
 
     channels.forEach(channel => {
+      const channelReferrals = getReferralNamesForChannel(
+        getLatestSnapshot(sorted),
+        channel
+      );
+
+      const referralListHtml = channelReferrals.length
+        ? channelReferrals.map(name => `<div class="channel-referral-item">${escapeHtml(name)}</div>`).join("")
+        : `<div class="empty">暂无 Referral</div>`;
+
       bodyHtml += `
         <tr>
           <td>
-            <span class="channel-name">
-              ${escapeHtml(channel)}
-            </span>
+            <details class="channel-referral-dropdown">
+              <summary>
+                <span class="channel-name">${escapeHtml(channel)}</span>
+                <span class="channel-referral-count">${channelReferrals.length} 个 Referral</span>
+              </summary>
+              <div class="channel-referral-list">
+                ${referralListHtml}
+              </div>
+            </details>
           </td>
       `;
 
@@ -2263,60 +2289,142 @@ function renderDailyChannelTable(snapshots) {
      Referral 明细
   ========================= */
 
+function getReferralDailyValue(snapshot, referralName, snapshots) {
+    if (!snapshot) return { revenue: 0, orders: 0 };
+
+    const current = snapshot.referrals.find(item => item.name === referralName);
+    if (!current) return { revenue: 0, orders: 0 };
+
+    const previous = getPreviousSnapshot(
+      snapshots,
+      snapshot.project,
+      snapshot.date
+    );
+
+    const previousReferral = previous?.referrals?.find(
+      item => item.name === referralName
+    ) || null;
+
+    // Referral 第一次出现在历史数据中时，不能把它的历史累计值全部算成当天新增。
+    // 第一张快照除外：第一张快照作为初始基准，其累计值可作为首日数据。
+    if (!previous) {
+      return {
+        revenue: Math.max(0, Number(current.total || 0)),
+        orders: Math.max(0, Number(current.orders || 0))
+      };
+    }
+
+    if (!previousReferral) {
+      return { revenue: 0, orders: 0 };
+    }
+
+    return {
+      revenue: Math.max(0, Number(current.total || 0) - Number(previousReferral.total || 0)),
+      orders: Math.max(0, Number(current.orders || 0) - Number(previousReferral.orders || 0))
+    };
+  }
+
+function getReferralNamesForChannel(snapshot, channelName) {
+    if (!snapshot) return [];
+
+    return snapshot.referrals
+      .filter(item =>
+        Number(item.total || 0) !== 0 &&
+        classifyChannel(item.name) === channelName
+      )
+      .map(item => item.name)
+      .sort((a, b) => a.localeCompare(b));
+  }
+
 function renderReferrals(snapshots) {
     const body = document.getElementById("referralBody");
+    const head = document.getElementById("referralDailyHead");
     const latest = getLatestSnapshot(snapshots);
 
-    if (!latest) {
+    if (!latest || !snapshots.length) {
+      if (head) head.innerHTML = "";
       body.innerHTML = `
         <tr>
-          <td colspan="6" class="empty">暂无数据</td>
+          <td class="empty">暂无数据</td>
         </tr>
       `;
       return;
     }
 
+    const sorted = [...snapshots].sort((a, b) => a.date.localeCompare(b.date));
+
+    // 只显示最新快照中有销售的 Referral；与原 Referral 明细的筛选规则保持一致。
     const referrals = latest.referrals
       .filter(item => Number(item.total || 0) !== 0)
       .sort((a, b) => Number(b.total || 0) - Number(a.total || 0));
 
     if (!referrals.length) {
+      if (head) head.innerHTML = "";
       body.innerHTML = `
         <tr>
-          <td colspan="6" class="empty">暂无有效带量 Referral</td>
+          <td class="empty">暂无有效带量 Referral</td>
         </tr>
       `;
       return;
     }
 
+    let headHtml = `
+      <tr>
+        <th rowspan="2">Referral</th>
+        <th rowspan="2">渠道</th>
+    `;
+
+    sorted.forEach(snapshot => {
+      headHtml += `
+        <th colspan="2" class="date-group">
+          ${escapeHtml(snapshot.date)}
+        </th>
+      `;
+    });
+
+    headHtml += `</tr><tr>`;
+
+    sorted.forEach(() => {
+      headHtml += `
+        <th class="sub-header">Sales</th>
+        <th class="sub-header">Orders</th>
+      `;
+    });
+
+    headHtml += `</tr>`;
+    head.innerHTML = headHtml;
+
     let html = "";
 
     referrals.forEach(item => {
-      const daily = getReferralDailyForSnapshot(
-        latest,
-        item.name,
-        snapshots
-      );
+      const channel = classifyChannel(item.name);
 
       html += `
         <tr>
           <td>${escapeHtml(item.name)}</td>
-          <td>${escapeHtml(classifyChannel(item.name))}</td>
-          <td class="number">${number(item.orders)}</td>
-          <td class="number">${money(item.total)}</td>
-          <td class="number ${changeClass(daily.orders)}">
-            ${signedNumber(daily.orders)}
-          </td>
-          <td class="number ${changeClass(daily.revenue)}">
-            ${signedMoney(daily.revenue)}
-          </td>
-        </tr>
+          <td>${escapeHtml(channel)}</td>
       `;
+
+      sorted.forEach(snapshot => {
+        const daily = getReferralDailyValue(snapshot, item.name, sorted);
+        const revenueClass = daily.revenue > 0 ? "positive" : "muted";
+        const orderClass = daily.orders > 0 ? "positive" : "muted";
+
+        html += `
+          <td class="number">
+            <span class="${revenueClass}">${money(daily.revenue)}</span>
+          </td>
+          <td class="number">
+            <span class="${orderClass}">${number(daily.orders)}</span>
+          </td>
+        `;
+      });
+
+      html += `</tr>`;
     });
 
     body.innerHTML = html;
   }
-
 
 
   /* =========================
