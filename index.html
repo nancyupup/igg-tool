@@ -1183,112 +1183,74 @@ HK$2,000.00"
 
   function parseReferralText(raw) {
     /*
-     * IGG 后台复制出来的数据并不是严格的固定行格式。
-     * 页面按钮（Copy link / Deactivate / Activate）以及其他 UI 文本
-     * 可能会混进复制结果，因此不能再用“每 7 行一个 Referral”的方式解析。
+     * IGG 后台复制出来的数据不是严格的 7 行一组：
+     * 每条 Referral 后面通常还会带 Copy link / Deactivate，
+     * 有时甚至会变成一行 "Copy linkDeactivate"。
      *
-     * 一个有效 Referral 必须满足完整结构：
-     *   Referral Name
-     *   active / inactive / deactivated / paused
-     *   整数订单数
-     *   金额
-     *   金额
-     *   金额
-     *   金额
-     *
-     * 只有完整 7 项全部成立才计入，并按 Referral 名称去重。
+     * 因此这里不再“每 7 行切一条”，而是以 status(active/inactive/paused...)
+     * 为锚点，向前找 Referral 名称、向后严格读取订单 + 4 个金额。
+     * 这样 UI 操作文字不会被误识别成 Referral。
      */
-    const lines = String(raw || '')
+    const lines = String(raw || "")
+      .replace(/\uFEFF/g, "")
       .split(/\r?\n/)
-      .map(x => x.trim())
+      .map(line => line.replace(/\*\*/g, "").trim())
       .filter(Boolean);
 
-    const result = [];
-    const seen = new Set();
+    const statusRegex = /^(active|inactive|deactivated|paused)$/i;
+    const moneyRegex = /^[+-]?(?:HK\$|US\$|USD|HKD|\$|€|£|A\$|C\$|AU\$|CA\$)?\s*[+-]?(?:\d[\d,]*|\d*\.\d+)(?:\.\d{1,2})?$/i;
+    const orderRegex = /^\d+$/;
+    const ignoredNameRegex = /^(copy\s*link\s*deactivate|copy\s*link|deactivate|activate|delete)$/i;
 
-    const isStatus = value =>
-      /^(active|inactive|deactivated|paused)$/i.test(String(value || '').trim());
+    const parsedByName = new Map();
 
-    const isOrders = value =>
-      /^\d+$/.test(String(value || '').trim());
+    function cleanName(value) {
+      return String(value || "")
+        .replace(/\u00a0/g, " ")
+        .replace(/\*\*/g, "")
+        .trim();
+    }
 
-    const isMoney = value => {
-      const str = String(value || '').trim();
-      if (!str) return false;
+    function validMoney(value) {
+      const v = String(value || "").trim();
+      if (!v) return false;
+      if (/^-+$/.test(v)) return true;
+      return moneyRegex.test(v) && /\d/.test(v);
+    }
 
-      // IGG 金额，例如：HK$7,739.00、-HK$6,389.00、$0.00、HK$0
-      return /^[+-]?(?:HK\$|US\$|\$|€|£|¥|CNY|USD|HKD)?[\d,]+(?:\.\d+)?$/.test(str);
-    };
+    // 以 status 行作为唯一记录锚点，避免 Copy linkDeactivate 等 UI 文本造成误识别。
+    for (let i = 0; i < lines.length; i++) {
+      if (!statusRegex.test(lines[i])) continue;
+      if (i < 1 || i + 5 >= lines.length) continue;
 
-    const isUiLine = value => {
-      const n = String(value || '').trim().toLowerCase();
-      return (
-        n === 'copy link' ||
-        n === 'deactivate' ||
-        n === 'activate' ||
-        n === 'delete' ||
-        n === 'delete link' ||
-        /^id=/.test(n)
-      );
-    };
+      const name = cleanName(lines[i - 1]);
+      const ordersRaw = lines[i + 1].replace(/,/g, "").trim();
+      const oneDayRaw = lines[i + 2];
+      const sevenDayRaw = lines[i + 3];
+      const incomeRaw = lines[i + 4];
+      const totalRaw = lines[i + 5];
 
-    // 去掉明显属于后台 UI 的行，但不依赖行数。
-    const cleanLines = lines.filter(line => !isUiLine(line));
+      if (!name || ignoredNameRegex.test(name)) continue;
+      if (!orderRegex.test(ordersRaw)) continue;
+      if (![oneDayRaw, sevenDayRaw, incomeRaw, totalRaw].every(validMoney)) continue;
 
-    for (let i = 0; i < cleanLines.length; i++) {
-      const name = cleanLines[i];
-
-      // Referral 名称不能本身是状态、订单或金额。
-      if (
-        isStatus(name) ||
-        isOrders(name) ||
-        isMoney(name) ||
-        isUiLine(name)
-      ) {
-        continue;
-      }
-
-      // 从当前名称开始，必须找到完整且连续的 6 个字段。
-      if (i + 6 >= cleanLines.length) continue;
-
-      const status = cleanLines[i + 1];
-      const ordersRaw = cleanLines[i + 2];
-      const oneDayRaw = cleanLines[i + 3];
-      const sevenDayRaw = cleanLines[i + 4];
-      const incomeRaw = cleanLines[i + 5];
-      const totalRaw = cleanLines[i + 6];
-
-      if (!isStatus(status)) continue;
-      if (!isOrders(ordersRaw)) continue;
-      if (!isMoney(oneDayRaw)) continue;
-      if (!isMoney(sevenDayRaw)) continue;
-      if (!isMoney(incomeRaw)) continue;
-      if (!isMoney(totalRaw)) continue;
-
-      const normalizedName = name.trim();
-      if (!normalizedName || seen.has(normalizedName)) {
-        // 已经识别过的 Referral 不重复加入。
-        continue;
-      }
-
-      seen.add(normalizedName);
-
-      result.push({
-        name: normalizedName,
-        status: status.trim(),
-        orders: parseInt(ordersRaw, 10),
+      const item = {
+        name,
+        status: lines[i],
+        orders: Number.parseInt(ordersRaw, 10) || 0,
         oneDay: parseMoney(oneDayRaw),
         sevenDay: parseMoney(sevenDayRaw),
         income: parseMoney(incomeRaw),
         total: parseMoney(totalRaw)
-      });
+      };
 
-      // 成功识别一个完整 Referral 后跳过其字段，避免再次扫描内部字段。
-      i += 6;
+      // 同名 Referral 只保留一条，避免复制/粘贴重复导致数量虚高。
+      parsedByName.set(name, item);
     }
 
-    return result;
+    return Array.from(parsedByName.values());
   }
+
 
   /* =========================
      找前一个快照
@@ -1532,7 +1494,7 @@ function calculateDaily(referral, previousReferral) {
 
 
     alert(
-      `导入成功！\n日期：${date}\n识别 Referral：${referrals.length} 个`
+      `导入成功！\n日期：${date}\n识别 Referral：${referrals.length} 个\n\n系统按“status + 订单 + 4 个金额”结构识别，并自动去除重复 Referral。`
     );
 
   }
@@ -2120,41 +2082,58 @@ function renderChannelDetail(channel, snapshots) {
   ========================= */
 
 function getChannelDailyData(snapshot, channelName, snapshots) {
-    const result = {
-      revenue: 0,
-      orders: 0
-    };
-
+    /*
+     * 渠道每日新增必须用“渠道累计值”做前后日比较，
+     * 而不是逐个 Referral 相减。
+     *
+     * 原来的逻辑在 EDM 这类渠道存在 Referral 新增/消失、
+     * 历史快照结构变化时，可能把某个 Referral 的累计订单
+     * 当成今日新增，导致“前一天 19 单、今天还是 19 单，
+     * 今日新增却显示 19”的错误。
+     *
+     * 现在直接比较：
+     * 今日该渠道累计订单 - 昨日该渠道累计订单
+     * 今日该渠道累计销售 - 昨日该渠道累计销售
+     *
+     * 如果两天累计值一致，今日新增严格为 0。
+     */
     if (!snapshot) {
-      return result;
+      return { revenue: 0, orders: 0 };
     }
 
-    const previous = getPreviousSnapshot(
+    const sumChannel = (targetSnapshot) => {
+      let orders = 0;
+      let revenue = 0;
+
+      if (!targetSnapshot) {
+        return { orders: 0, revenue: 0 };
+      }
+
+      targetSnapshot.referrals.forEach(item => {
+        if (classifyChannel(item.name) !== channelName) return;
+
+        // 渠道表只统计带量 Referral。
+        if (Number(item.total || 0) === 0) return;
+
+        orders += Number(item.orders || 0);
+        revenue += Number(item.total || 0);
+      });
+
+      return { orders, revenue };
+    };
+
+    const current = sumChannel(snapshot);
+    const previousSnapshot = getPreviousSnapshot(
       snapshots,
       snapshot.project,
       snapshot.date
     );
+    const previous = sumChannel(previousSnapshot);
 
-    snapshot.referrals.forEach(item => {
-      if (classifyChannel(item.name) !== channelName) {
-        return;
-      }
-
-      if (Number(item.total || 0) === 0) {
-        return;
-      }
-
-      const previousReferral = previous?.referrals?.find(
-        prev => prev.name === item.name
-      ) || null;
-
-      const daily = calculateDaily(item, previousReferral);
-
-      result.revenue += daily.revenue;
-      result.orders += daily.orders;
-    });
-
-    return result;
+    return {
+      orders: Math.max(0, current.orders - previous.orders),
+      revenue: Math.max(0, current.revenue - previous.revenue)
+    };
   }
 
 function getActiveChannels(snapshots) {
@@ -2428,20 +2407,30 @@ function renderReferrals(snapshots) {
             </div>
 
 
-            <div style="text-align:right">
+            <div style="display:flex;align-items:center;gap:14px;justify-content:flex-end">
 
-              <div>
-                ${money(
-                  revenue
-                )}
-              </div>
+              <div style="text-align:right">
+                <div>
+                  ${money(
+                    revenue
+                  )}
+                </div>
 
-              <div class="history-meta">
-                ${number(
+                <div class="history-meta">
+                  ${number(
+                    orders
+                  )}
                   orders
-                )}
-                orders
+                </div>
               </div>
+
+              <button
+                class="btn-secondary"
+                style="padding:6px 10px;font-size:12px"
+                onclick="event.stopPropagation(); deleteSnapshot('${escapeHtml(snapshot.date)}')"
+              >
+                删除当天
+              </button>
 
             </div>
 
@@ -2456,6 +2445,32 @@ function renderReferrals(snapshots) {
     box.innerHTML =
       html;
 
+  }
+
+
+  /* =========================
+     删除单日历史
+  ========================= */
+
+  function deleteSnapshot(date) {
+    const snapshots = getSnapshots();
+
+    const target = snapshots.find(item => item.date === date);
+    if (!target) {
+      alert("未找到该日期的数据");
+      return;
+    }
+
+    const confirmed = confirm(
+      `确定删除 ${date} 的历史数据吗？\n\n删除后，该日期将不再参与后续每日新增计算。`
+    );
+
+    if (!confirmed) return;
+
+    const next = snapshots.filter(item => item.date !== date);
+    saveSnapshots(next);
+    renderAll();
+    alert(`已删除 ${date} 的历史数据`);
   }
 
 
